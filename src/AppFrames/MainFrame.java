@@ -89,10 +89,8 @@ public class MainFrame extends JFrame implements ActionListener {
             initGoodsPage();
         } else if (e.getSource() == statisticsPage) {
             //load statistics page
-
         } else if (e.getSource() == aboutPage) {
             //load about page
-
         }
     }
 
