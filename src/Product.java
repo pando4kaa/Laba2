@@ -14,6 +14,31 @@ public class Product {
         this.quantity = quantity;
         this.price = price;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public String getName() {
         return name;
     }
@@ -38,7 +63,4 @@ public class Product {
         return price;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 }

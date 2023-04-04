@@ -3,7 +3,7 @@ import java.util.List;
 public class ProductsGroup {
     private String name; //назва групи товарів
     private String description; //опис групи товарів
-    private List<Product> products;
+    public List<Product> products;
 
     public ProductsGroup(String name, String description, List<Product> products) {
         this.name = name;
