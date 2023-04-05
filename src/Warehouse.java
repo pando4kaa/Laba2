@@ -381,6 +381,28 @@ public class Warehouse {
         }
         System.out.println("Групу товарів з такою назвою не знайдено!");
     }
+
+    /**
+     * Метод, який повертає список груп.
+     * @return group ArrayList
+     */
+    public List<ProductsGroup> getGroups() {
+        return groups;
+    }
+
+    /**
+     * Знаходить групу за назвою
+     * @param title назва шуканої групи
+     * @return група
+     */
+    public ProductsGroup findGroupByTitle(String title){
+        for (ProductsGroup existingGroup : groups) {
+            if (existingGroup.getName().equals(title)) {
+                return existingGroup;
+            }
+        }
+        return null;
+    }
 }
 
 
