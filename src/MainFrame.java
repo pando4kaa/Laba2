@@ -10,6 +10,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     //Ініціалізація складу
     Warehouse warehouse = new Warehouse();
+    String choosedGroup = null;
 
     JFrame mainFrame = new JFrame();
     JPanel contentPanel = new JPanel(new GridLayout(1, 1));
@@ -28,7 +29,6 @@ public class MainFrame extends JFrame implements ActionListener {
     JPanel goodsTablePanel;
 
     //Goods page buttons
-
     JButton addGroup;
     JButton removeGroup;
     JButton editGroup;
@@ -40,11 +40,13 @@ public class MainFrame extends JFrame implements ActionListener {
     JButton increaseGoods;
     JButton decreaseGoods;
 
+    /**
+     * Конструктор класу, який створює вікно.
+     */
     public MainFrame(){
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainFrame.setSize(1000, 500);
         mainFrame.setLayout(new BorderLayout());
-        //mainFrame.setResizable(false);
 
         initMenuBar();
         initContentPanel();
@@ -55,16 +57,25 @@ public class MainFrame extends JFrame implements ActionListener {
         mainFrame.setVisible(true);
     }
 
+    /**
+     * Ініціалізація контейнера з усім вмістом сторінки (без меню).
+     */
     private void initContentPanel() {
         //Settings of the contentPanel
     }
 
+    /**
+     * Метод, який очищує вміст контейнера сторінки.
+     */
     private void clearContentPanel() {
         contentPanel.removeAll();
         contentPanel.revalidate();
         contentPanel.repaint();
     }
 
+    /**
+     * Метод, який ініціалізує верхнє меню.
+     */
     private void initMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBorderPainted(false);
@@ -94,41 +105,59 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Invoked when an action occurs.
-     * @param e the event to be processed
+     * Слухач для кнопок.
+     * @param e the event to be processed.
      */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == mainPage){
+            clearContentPanel();
             initMainPageContent();
         } else if(e.getSource() == goodsPage){
+            clearContentPanel();
             initGoodsPage();
         } else if (e.getSource() == statisticsPage) {
+            clearContentPanel();
             initStatisticsPage();
         } else if (e.getSource() == aboutPage) {
+            clearContentPanel();
             initAboutPage();
         } else if (e.getSource() == addGroup){
-
+            //Кнопка додавання групи
         } else if (e.getSource() == removeGroup){
-
+            //Кнопка видалення групи
         } else if (e.getSource() == editGroup){
-
+            //Кнопка редагування групи
         } else if (e.getSource() == addGoods){
-
+            //Кнопка додавання товарів
         } else if (e.getSource() == removeGoods){
-
+            //Кнопка видалення товарів
         } else if (e.getSource() == editGoods){
-
+            //Кнопка редагування товарів
         } else if (e.getSource() == increaseGoods){
-            String groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            String groupName;
+            try {
+                groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            } catch (Exception exception){
+                groupName = choosedGroup;
+            }
+
             String productName = (String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
             int oldQuanity = Integer.parseInt((String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 3));
+
             warehouse.editProductQuantity(groupName, productName, oldQuanity+1);
             updateGoodsTable(groupName);
         } else if (e.getSource() == decreaseGoods){
-            String groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            String groupName;
+            try {
+                groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            } catch (Exception exception){
+                groupName = choosedGroup;
+            }
+
             String productName = (String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
             int oldQuanity = Integer.parseInt((String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 3));
+
             if(oldQuanity <= 0){
                 JOptionPane.showMessageDialog(null, "Значення кількості товару не може бути менше за 0", "Помилка", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -138,6 +167,10 @@ public class MainFrame extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Метод, який оновлює таблицю товарів.
+     * @param groupTitle група, товари якої будуть зображені.
+     */
     private void updateGoodsTable(String groupTitle) {
         goodsTablePanel.removeAll();
         goodsTablePanel.revalidate();
@@ -161,8 +194,10 @@ public class MainFrame extends JFrame implements ActionListener {
         goodsTablePanel.add(goodsTableScrollLambda);;
     }
 
+    /**
+     * Метод, який ініціалізує вміст головної сторінки.
+     */
     private void initMainPageContent() {
-        clearContentPanel();
         JPanel mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.PAGE_AXIS));
 
@@ -200,8 +235,10 @@ public class MainFrame extends JFrame implements ActionListener {
         contentPanel.add(mainContentPanel);
     }
 
+    /**
+     * Метод, який ініціалізує вміст сторінки "Про програму".
+     */
     private void initAboutPage() {
-        clearContentPanel();
         JPanel aboutContentPanel = new JPanel();
         aboutContentPanel.setBackground(Color.blue);
         aboutContentPanel.setLayout(new FlowLayout());
@@ -209,14 +246,18 @@ public class MainFrame extends JFrame implements ActionListener {
         contentPanel.add(aboutContentPanel);
     }
 
+    /**
+     * Метод, який ініціалізує вміст сторінки "Статистика".
+     */
     private void initStatisticsPage() {
-        clearContentPanel();
         JPanel statiscticsContentPanel = new JPanel();
         statiscticsContentPanel.setLayout(new BorderLayout());
     }
 
+    /**
+     * Метод, який ініціалізує вміст сторінки "Товари".
+     */
     private void initGoodsPage() {
-        clearContentPanel();
 
         //Головне найбільше вікно, яке тримає усі інші обʼєкти в собі
         JPanel goodsContentPanel = new JPanel();
@@ -257,11 +298,13 @@ public class MainFrame extends JFrame implements ActionListener {
         goodsTablePanel = new JPanel(new GridLayout(1, 1));
         goodsTablePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        goodsTable = new JTable();
-
-        JScrollPane goodsTableScroll = new JScrollPane(goodsTable);
-        goodsTablePanel.add(goodsTableScroll);
-
+        if(choosedGroup == null){
+            goodsTable = new JTable();
+            JScrollPane goodsTableScroll = new JScrollPane(goodsTable);
+            goodsTablePanel.add(goodsTableScroll);
+        } else {
+            updateGoodsTable(choosedGroup);
+        }
 
         //Створення слухача для реакції на вибір рядка в таблиці з групами
         groupTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -269,8 +312,8 @@ public class MainFrame extends JFrame implements ActionListener {
             public void valueChanged(ListSelectionEvent e) {
                 ListSelectionModel lsm = (ListSelectionModel)e.getSource();
                 if ( !e.getValueIsAdjusting() && !lsm.isSelectionEmpty()) {
-                    String groupTitle = groupTable.getValueAt(groupTable.getSelectedRow(), 0).toString();
-                    updateGoodsTable(groupTitle);
+                    choosedGroup = groupTable.getValueAt(groupTable.getSelectedRow(), 0).toString();
+                    updateGoodsTable(choosedGroup);
                 }
             }
         });
@@ -307,6 +350,11 @@ public class MainFrame extends JFrame implements ActionListener {
         contentPanel.add(goodsContentPanel);
     }
 
+    /**
+     * Метод, що ініціалізує контейнер з таблицею з групами товарів.
+     * @param warehouse склад.
+     * @return контейнер з таблицею.
+     */
     private JPanel initGroupTable(Warehouse warehouse) {
         //Створення контейнера з таблицею для груп товарів
         JPanel tablePanel = new JPanel(new GridLayout(1, 1));
