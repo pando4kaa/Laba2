@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame implements ActionListener {
 
+    //Ініціалізація складу
+    Warehouse warehouse = new Warehouse();
+
     JFrame mainFrame = new JFrame();
     JPanel contentPanel = new JPanel(new GridLayout(1, 1));
 
@@ -21,6 +24,21 @@ public class MainFrame extends JFrame implements ActionListener {
 
     String[] columnNames = {"Назва", "Опис"};
     String[] goodsColumnNames = {"Назва", "Автор", "Опис", "Кількість", "Ціна"};
+
+    JPanel goodsTablePanel;
+
+    //Goods page buttons
+
+    JButton addGroup;
+    JButton removeGroup;
+    JButton editGroup;
+
+    JButton addGoods;
+    JButton removeGoods;
+    JButton editGoods;
+
+    JButton increaseGoods;
+    JButton decreaseGoods;
 
     public MainFrame(){
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -89,7 +107,58 @@ public class MainFrame extends JFrame implements ActionListener {
             initStatisticsPage();
         } else if (e.getSource() == aboutPage) {
             initAboutPage();
+        } else if (e.getSource() == addGroup){
+
+        } else if (e.getSource() == removeGroup){
+
+        } else if (e.getSource() == editGroup){
+
+        } else if (e.getSource() == addGoods){
+
+        } else if (e.getSource() == removeGoods){
+
+        } else if (e.getSource() == editGoods){
+
+        } else if (e.getSource() == increaseGoods){
+            String groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            String productName = (String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+            int oldQuanity = Integer.parseInt((String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 3));
+            warehouse.editProductQuantity(groupName, productName, oldQuanity+1);
+            updateGoodsTable(groupName);
+        } else if (e.getSource() == decreaseGoods){
+            String groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            String productName = (String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+            int oldQuanity = Integer.parseInt((String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 3));
+            if(oldQuanity <= 0){
+                JOptionPane.showMessageDialog(null, "Значення кількості товару не може бути менше за 0", "Помилка", JOptionPane.ERROR_MESSAGE);
+            } else {
+                warehouse.editProductQuantity(groupName, productName, oldQuanity-1);
+                updateGoodsTable(groupName);
+            }
         }
+    }
+
+    private void updateGoodsTable(String groupTitle) {
+        goodsTablePanel.removeAll();
+        goodsTablePanel.revalidate();
+        goodsTablePanel.repaint();
+
+        goodsTable = new JTable(GoodsParser.parseGroupGoods(warehouse.findGroupByTitle(groupTitle)), goodsColumnNames);
+        goodsTable.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
+        goodsTable.getColumnModel().getColumn(1).setCellRenderer(new MyCellRenderer());
+        goodsTable.getColumnModel().getColumn(2).setCellRenderer(new MyCellRenderer());
+
+        goodsTable.getColumnModel().getColumn(2).setMinWidth(100);
+        goodsTable.getColumnModel().getColumn(2).setMinWidth(75);
+        goodsTable.getColumnModel().getColumn(2).setMinWidth(200);
+        goodsTable.getColumnModel().getColumn(3).setMaxWidth(50);
+        goodsTable.getColumnModel().getColumn(4).setMaxWidth(50);
+
+        goodsTable.setShowGrid(true);
+        goodsTable.setGridColor(Color.BLACK);
+
+        JScrollPane goodsTableScrollLambda = new JScrollPane(goodsTable);
+        goodsTablePanel.add(goodsTableScrollLambda);;
     }
 
     private void initMainPageContent() {
@@ -153,9 +222,6 @@ public class MainFrame extends JFrame implements ActionListener {
         JPanel goodsContentPanel = new JPanel();
         goodsContentPanel.setLayout(new BorderLayout());
 
-        //Ініціалізація складу
-        Warehouse warehouse = new Warehouse();
-
         //ЛІВА ЧАСТИНА ВІКНА
 
         //Створення лівого вікна для групи товарів та кнопок
@@ -168,9 +234,13 @@ public class MainFrame extends JFrame implements ActionListener {
         JPanel groupButtonsPanel = new JPanel();
         groupButtonsPanel.setLayout(new BoxLayout(groupButtonsPanel, BoxLayout.X_AXIS));
 
-        JButton addGroup = new JButton("Додати");
-        JButton removeGroup = new JButton("Видалити");
-        JButton editGroup = new JButton("Редагувати");
+        addGroup = new JButton("Додати");
+        removeGroup = new JButton("Видалити");
+        editGroup = new JButton("Редагувати");
+
+        addGroup.addActionListener(this);
+        removeGroup.addActionListener(this);
+        editGroup.addActionListener(this);
 
         groupButtonsPanel.add(addGroup);
         groupButtonsPanel.add(removeGroup);
@@ -184,7 +254,7 @@ public class MainFrame extends JFrame implements ActionListener {
         JPanel goodsPanel = new JPanel();
         goodsPanel.setLayout(new BoxLayout(goodsPanel, BoxLayout.Y_AXIS));
 
-        JPanel goodsTablePanel = new JPanel(new GridLayout(1, 1));
+        goodsTablePanel = new JPanel(new GridLayout(1, 1));
         goodsTablePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         goodsTable = new JTable();
@@ -200,27 +270,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 ListSelectionModel lsm = (ListSelectionModel)e.getSource();
                 if ( !e.getValueIsAdjusting() && !lsm.isSelectionEmpty()) {
                     String groupTitle = groupTable.getValueAt(groupTable.getSelectedRow(), 0).toString();
-
-                    goodsTablePanel.removeAll();
-                    goodsTablePanel.revalidate();
-                    goodsTablePanel.repaint();
-
-                    goodsTable = new JTable(GoodsParser.parseGroupGoods(warehouse.findGroupByTitle(groupTitle)), goodsColumnNames);
-                    goodsTable.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
-                    goodsTable.getColumnModel().getColumn(1).setCellRenderer(new MyCellRenderer());
-                    goodsTable.getColumnModel().getColumn(2).setCellRenderer(new MyCellRenderer());
-
-                    goodsTable.getColumnModel().getColumn(2).setMinWidth(100);
-                    goodsTable.getColumnModel().getColumn(2).setMinWidth(75);
-                    goodsTable.getColumnModel().getColumn(2).setMinWidth(200);
-                    goodsTable.getColumnModel().getColumn(3).setMaxWidth(50);
-                    goodsTable.getColumnModel().getColumn(4).setMaxWidth(50);
-
-                    goodsTable.setShowGrid(true);
-                    goodsTable.setGridColor(Color.BLACK);
-
-                    JScrollPane goodsTableScrollLambda = new JScrollPane(goodsTable);
-                    goodsTablePanel.add(goodsTableScrollLambda);;
+                    updateGoodsTable(groupTitle);
                 }
             }
         });
@@ -228,9 +278,21 @@ public class MainFrame extends JFrame implements ActionListener {
         JPanel goodsButtonsPanel = new JPanel();
         goodsButtonsPanel.setLayout(new BoxLayout(goodsButtonsPanel, BoxLayout.X_AXIS));
 
-        JButton addGoods = new JButton("Додати");
-        JButton removeGoods = new JButton("Видалити");
-        JButton editGoods = new JButton("Редагувати");
+        increaseGoods = new JButton("+");
+        decreaseGoods = new JButton("-");
+
+        addGoods = new JButton("Додати");
+        removeGoods = new JButton("Видалити");
+        editGoods = new JButton("Редагувати");
+
+        increaseGoods.addActionListener(this);
+        decreaseGoods.addActionListener(this);
+        addGoods.addActionListener(this);
+        removeGoods.addActionListener(this);
+        editGoods.addActionListener(this);
+
+        goodsButtonsPanel.add(increaseGoods);
+        goodsButtonsPanel.add(decreaseGoods);
 
         goodsButtonsPanel.add(addGoods);
         goodsButtonsPanel.add(removeGoods);
