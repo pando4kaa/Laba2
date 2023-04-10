@@ -2,6 +2,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicBorders;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.multi.MultiLookAndFeel;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import javax.swing.plaf.synth.SynthLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,9 +48,10 @@ public class MainFrame extends JFrame implements ActionListener {
     /**
      * Конструктор класу, який створює вікно.
      */
-    public MainFrame(){
+    public MainFrame() throws UnsupportedLookAndFeelException {
         mainFrame.setTitle("єСклад");
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        UIManager.setLookAndFeel(new MetalLookAndFeel());
         mainFrame.setMinimumSize(new Dimension(1000, 500));
         mainFrame.setLayout(new BorderLayout());
 
