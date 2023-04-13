@@ -1,15 +1,17 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Warehouse {
-    private List<ProductsGroup> groups = new ArrayList<>();
+    private static List<ProductsGroup> groups = new ArrayList<>();
 
     /**
      * дефолтні групи товарів: художня література, психологія та бізнес. кожна група товарів містить назву та опис.
      * кожна книга має назву, автора, опис, видавництво, кількість на складі, ціну за одиницю.
      */
-    ProductsGroup defaultGroup1 = new ProductsGroup(
+    public static ProductsGroup defaultGroup1 = new ProductsGroup(
             "Художня література",
             "якийсь опис",
             Arrays.asList(
@@ -140,13 +142,14 @@ public class Warehouse {
         groups.add(defaultGroup1);
         groups.add(defaultGroup2);
         groups.add(defaultGroup3);
+        writeToFile();
     }
 
     /**
      * додає нову групу товарів до списку groups, якщо група з такою ж назвою ще не існує
      * @param group
      */
-    public void addProductGroup(ProductsGroup group) {
+    public static void addProductGroup(ProductsGroup group) {
         for (ProductsGroup existingGroup : groups) {
             if (existingGroup.getName().equals(group.getName())) {
                 System.out.println("Група товарів з такою назвою вже існує.");
@@ -154,6 +157,7 @@ public class Warehouse {
             }
         }
         groups.add(group);
+        writeToFile();
         System.out.println("Група товарів додана успішно!");
     }
 
@@ -163,7 +167,7 @@ public class Warehouse {
      * @param newName
      * @param newDescription
      */
-    public void editProductsGroup(String oldName, String newName, String newDescription) {
+    public static void editProductsGroup(String oldName, String newName, String newDescription) {
         for (ProductsGroup group : groups) {
             if (group.getName().equals(oldName)) {
                 //перевірка, чи не міститься вже така група товарів за новою назвою
@@ -175,6 +179,7 @@ public class Warehouse {
                 }
                 group.setName(newName);
                 group.setDescription(newDescription);
+                writeToFile();
                 System.out.println("Група товарів відредагована успішно!");
                 return;
             }
@@ -186,10 +191,11 @@ public class Warehouse {
      * видаляє групу товарів зі списку groups за її назвою groupName
      * @param groupName
      */
-    public void deleteProductsGroup(String groupName) {
+    public static void deleteProductsGroup(String groupName) {
         for (ProductsGroup group : groups) {
             if (group.getName().equals(groupName)) {
                 groups.remove(group);
+                writeToFile();
                 System.out.println("Групу товарів успішно видалено");
                 return;
             }
@@ -206,6 +212,7 @@ public class Warehouse {
             if (group.getName().equals(name)) {
                 deleteAllProductsInGroup(group);//видаляє всі товари з групи
                 groups.remove(group);
+                writeToFile();
                 System.out.println("Група товарів та всі товари в ній видалені успішно!");
                 return;
             }
@@ -230,6 +237,7 @@ public class Warehouse {
         for (ProductsGroup group : groups) {
             if (group.getName().equals(groupName)) {
                 group.getProducts().add(product);
+                writeToFile();
                 System.out.println("Товар успішно додано до групи " + groupName);
                 return;
             }
@@ -256,6 +264,7 @@ public class Warehouse {
                             }
                         }
                         product.setName(newName);
+                        writeToFile();
                         System.out.println("Товар успішно відредаговано!");
                         return;
                     }
@@ -279,6 +288,7 @@ public class Warehouse {
                 for (Product product : group.getProducts()) {
                     if (product.getName().equals(name)) {
                         product.setAuthor(newAuthor);
+                        writeToFile();
                         System.out.println("Товар успішно відредаговано!");
                         return;
                     }
@@ -288,6 +298,7 @@ public class Warehouse {
             }
         }
         System.out.println("Групу товарів з такою назвою не знайдено!");
+
     }
 
     /**
@@ -302,6 +313,7 @@ public class Warehouse {
                 for (Product product : group.getProducts()) {
                     if (product.getName().equals(name)) {
                         product.setDescription(newDescription);
+                        writeToFile();
                         System.out.println("Товар успішно відредаговано!");
                         return;
                     }
@@ -325,6 +337,7 @@ public class Warehouse {
                 for (Product product : group.getProducts()) {
                     if (product.getName().equals(name)) {
                         product.setPublisher(newPublisher);
+                        writeToFile();
                         System.out.println("Товар успішно відредаговано!");
                         return;
                     }
@@ -348,6 +361,7 @@ public class Warehouse {
                 for (Product product : group.getProducts()) {
                     if (product.getName().equals(name)) {
                         product.setQuantity(newQuantity);
+                        writeToFile();
                         System.out.println("Товар успішно відредаговано!");
                         return;
                     }
@@ -371,6 +385,7 @@ public class Warehouse {
                 for (Product product : group.getProducts()) {
                     if (product.getName().equals(name)) {
                         product.setPrice(newPrice);
+                        writeToFile();
                         System.out.println("Товар успішно відредаговано!");
                         return;
                     }
@@ -378,6 +393,25 @@ public class Warehouse {
                 System.out.println("Товар з такою назвою не знайдено!");
                 return;
             }
+        }
+        System.out.println("Групу товарів з такою назвою не знайдено!");
+    }
+
+    /**
+     * cпочатку знаходить групу товарів, а потім видаляє сам товар з цієї групи, якщо він їй належить.
+     * @param productName
+     */
+    public void deleteProduct(String productName) {
+        for (ProductsGroup group : groups) { // проходимось по всіх групах товарів
+            for (Product product : group.getProducts()) { // проходимось по всіх товарах у групі
+                if (product.getName().equals(productName)) { // якщо знайдено товар з такою ж назвою
+                    group.getProducts().remove(product); // видаляємо товар з групи
+                    writeToFile();
+                    System.out.println("Товар успішно видалено!");
+                    return;
+                }
+            }
+            System.out.println("Товар з такою назвою не знайдено!");
         }
         System.out.println("Групу товарів з такою назвою не знайдено!");
     }
@@ -403,6 +437,22 @@ public class Warehouse {
         }
         return null;
     }
+
+    /**
+     *записування даних зі списку груп товарів у файл "test.txt".
+     */
+    public static void writeToFile(){
+        try {
+            FileWriter fileWriter = new FileWriter("src/test.txt");
+            for (ProductsGroup group : groups) {
+                fileWriter.write(group + "\n");
+            }
+                fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 

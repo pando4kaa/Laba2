@@ -6,6 +6,16 @@ public class Product {
     private int quantity;
     private double price;
 
+    @Override
+    public String toString() {
+        return "Назва книги: " + name + "\n" +
+                "Автор: " + author  + "\n" +
+                "Опис: " + description + "\n" +
+                "Видавництво: " + publisher + "\n" +
+                "Кількість на складі: " + quantity + "\n" +
+                "Ціна: " + price + "\n";
+    }
+
     public Product(String name, String author, String description, String publisher, int quantity, double price) {
         this.name = name;
         this.author = author;
