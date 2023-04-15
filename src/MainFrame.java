@@ -27,7 +27,8 @@ public class MainFrame extends JFrame implements ActionListener {
     String[] columnNames = {"Назва", "Опис"};
     String[] goodsColumnNames = {"Назва", "Автор", "Опис", "Кількість", "Ціна"};
 
-    JPanel goodsTablePanel, groupTablePanel;
+    JPanel goodsTablePanel;
+    JPanel groupTablePanel;
 
     //Goods page buttons
     JButton addGroup;
@@ -134,6 +135,7 @@ public class MainFrame extends JFrame implements ActionListener {
             if(choice == JOptionPane.YES_OPTION){
                 Warehouse.deleteProductsGroup(groupName);
                 updateGroupTable();
+                choosedGroup = null;
                 JOptionPane.showMessageDialog(null, "Групу " + groupName + " успішно видалено");
             }
         } else if (e.getSource() == editGroup){
@@ -184,21 +186,22 @@ public class MainFrame extends JFrame implements ActionListener {
     private void updateGroupTable() {
         groupTablePanel.removeAll();
         groupTablePanel.revalidate();
-        groupTablePanel.repaint();;
+        groupTablePanel.repaint();
 
-//        groupTable = new JTable(GoodsParser.parseGroups(warehouse.getGroups(), columnNames);
-        groupTable = new JTable(GoodsParser.parseGroups(warehouse), columnNames);
-        groupTable.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
-        groupTable.getColumnModel().getColumn(1).setCellRenderer(new MyCellRenderer());
-
-        groupTable.getColumnModel().getColumn(1).setMinWidth(50);
-        groupTable.getColumnModel().getColumn(1).setMaxWidth(50);
-
-        groupTable.setShowGrid(true);
-        groupTable.setGridColor(Color.BLACK);
-
-        JScrollPane groupTableScrollLambda = new JScrollPane(groupTable);
-        groupTablePanel.add(groupTableScrollLambda);
+        initGroupTable(warehouse);
+        groupTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+                if ( !e.getValueIsAdjusting() && !lsm.isSelectionEmpty()) {
+                    choosedGroup = groupTable.getValueAt(groupTable.getSelectedRow(), 0).toString();
+                    updateGoodsTable(choosedGroup);
+                }
+            }
+        });
+        goodsTablePanel.removeAll();
+        goodsTablePanel.revalidate();
+        goodsTablePanel.repaint();
     }
 
 
@@ -307,7 +310,10 @@ public class MainFrame extends JFrame implements ActionListener {
         groupPanel.setPreferredSize(new Dimension(400, 0));
         groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.Y_AXIS));
 
-        JPanel groupTablePanel = initGroupTable(warehouse);
+        groupTablePanel = new JPanel(new GridLayout(1, 1));
+        groupTablePanel.setBorder(new EmptyBorder(5,5,5,5));
+
+        initGroupTable(warehouse);
 
         JPanel groupButtonsPanel = new JPanel();
         groupButtonsPanel.setLayout(new BoxLayout(groupButtonsPanel, BoxLayout.X_AXIS));
@@ -390,13 +396,8 @@ public class MainFrame extends JFrame implements ActionListener {
     /**
      * Метод, що ініціалізує контейнер з таблицею з групами товарів.
      * @param warehouse склад.
-     * @return контейнер з таблицею.
      */
-    private JPanel initGroupTable(Warehouse warehouse) {
-        //Створення контейнера з таблицею для груп товарів
-        JPanel tablePanel = new JPanel(new GridLayout(1, 1));
-        tablePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+    private void initGroupTable(Warehouse warehouse) {
         //Створення таблиці з групами товарів
         groupTable = new JTable(GoodsParser.parseGroups(warehouse), columnNames);
         groupTable.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
@@ -405,7 +406,6 @@ public class MainFrame extends JFrame implements ActionListener {
         groupTable.setGridColor(Color.BLACK);
 
         JScrollPane scrollPaneTable = new JScrollPane(groupTable);
-        tablePanel.add(scrollPaneTable);
-        return tablePanel;
+        groupTablePanel.add(scrollPaneTable);
     }
 }
