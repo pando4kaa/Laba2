@@ -230,10 +230,20 @@ public class Warehouse {
 
     /**
      * Додає новий товар до групи з назвою groupName, якщо група існує
+     * та перевіряє на унікальність назву товару
      * @param groupName назва групи, до якої додається товар
      * @param product об'єкт товару, який додається
      */
     public void addProductToGroup(String groupName, Product product) {
+        // перевірка на унікальність назви товару
+        for (ProductsGroup group : groups) {
+            for (Product existingProduct : group.getProducts()) {
+                if (existingProduct.getName().equals(product.getName())) {
+                    System.out.println("Товар з назвою " + product.getName() + " вже існує в групі " + group.getName());
+                    return;
+                }
+            }
+        }
         for (ProductsGroup group : groups) {
             if (group.getName().equals(groupName)) {
                 group.getProducts().add(product);
