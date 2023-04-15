@@ -27,7 +27,7 @@ public class MainFrame extends JFrame implements ActionListener {
     String[] columnNames = {"Назва", "Опис"};
     String[] goodsColumnNames = {"Назва", "Автор", "Опис", "Кількість", "Ціна"};
 
-    JPanel goodsTablePanel;
+    JPanel goodsTablePanel, groupTablePanel;
 
     //Goods page buttons
     JButton addGroup;
@@ -129,7 +129,13 @@ public class MainFrame extends JFrame implements ActionListener {
             AddGroupUI addGroupDialog = new AddGroupUI();
             addGroupDialog.setVisible(true);
         } else if (e.getSource() == removeGroup){
-            //Кнопка видалення групи
+            String groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            int choice = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете видалити групу " + groupName + "?", "Видалити групу", JOptionPane.YES_NO_OPTION);
+            if(choice == JOptionPane.YES_OPTION){
+                Warehouse.deleteProductsGroup(groupName);
+                updateGroupTable();
+                JOptionPane.showMessageDialog(null, "Групу " + groupName + " успішно видалено");
+            }
         } else if (e.getSource() == editGroup){
             //Кнопка редагування групи
         } else if (e.getSource() == addGoods){
@@ -170,6 +176,31 @@ public class MainFrame extends JFrame implements ActionListener {
             }
         }
     }
+
+    /**
+
+     Метод, який оновлює таблицю груп.
+     */
+    private void updateGroupTable() {
+        groupTablePanel.removeAll();
+        groupTablePanel.revalidate();
+        groupTablePanel.repaint();;
+
+//        groupTable = new JTable(GoodsParser.parseGroups(warehouse.getGroups(), columnNames);
+        groupTable = new JTable(GoodsParser.parseGroups(warehouse), columnNames);
+        groupTable.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
+        groupTable.getColumnModel().getColumn(1).setCellRenderer(new MyCellRenderer());
+
+        groupTable.getColumnModel().getColumn(1).setMinWidth(50);
+        groupTable.getColumnModel().getColumn(1).setMaxWidth(50);
+
+        groupTable.setShowGrid(true);
+        groupTable.setGridColor(Color.BLACK);
+
+        JScrollPane groupTableScrollLambda = new JScrollPane(groupTable);
+        groupTablePanel.add(groupTableScrollLambda);
+    }
+
 
     /**
      * Метод, який оновлює таблицю товарів.
