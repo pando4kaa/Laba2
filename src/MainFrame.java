@@ -2,11 +2,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.multi.MultiLookAndFeel;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-import javax.swing.plaf.synth.SynthLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -130,7 +126,8 @@ public class MainFrame extends JFrame implements ActionListener {
             clearContentPanel();
             initAboutPage();
         } else if (e.getSource() == addGroup){
-            //Кнопка додавання групи
+            AddGroupUI addGroupDialog = new AddGroupUI();
+            addGroupDialog.setVisible(true);
         } else if (e.getSource() == removeGroup){
             //Кнопка видалення групи
         } else if (e.getSource() == editGroup){

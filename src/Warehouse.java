@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -150,15 +151,19 @@ public class Warehouse {
      * @param group
      */
     public static void addProductGroup(ProductsGroup group) {
+        if (group.getName() == null || group.getName().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Не введено назву групи товарів!");
+            return;
+        }
         for (ProductsGroup existingGroup : groups) {
-            if (existingGroup.getName().equals(group.getName())) {
-                System.out.println("Група товарів з такою назвою вже існує.");
+            if (existingGroup.getName().equalsIgnoreCase(group.getName())) {
+                JOptionPane.showMessageDialog(null,"Група товарів з такою назвою вже існує.");
                 return;
             }
         }
         groups.add(group);
         writeToFile();
-        System.out.println("Група товарів додана успішно!");
+        JOptionPane.showMessageDialog(null,"Група товарів додана успішно!");
     }
 
     /**
