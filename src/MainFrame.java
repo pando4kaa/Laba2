@@ -207,34 +207,36 @@ public class MainFrame extends JFrame implements ActionListener {
     private void initMainPageContent() {
         JPanel mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.PAGE_AXIS));
+        mainContentPanel.setBackground(new Color(206, 236, 246));
 
         JLabel welcomeText = new JLabel("Вітаємо у нашій інтернет-книгарні \"ЯкаКнига\"");
         welcomeText.setAlignmentX(Component.CENTER_ALIGNMENT);
-        welcomeText.setFont(new Font("Helvetica", Font.PLAIN, 20));
+        welcomeText.setFont(new Font("Helvetica", Font.BOLD, 20));
         welcomeText.setBorder(new EmptyBorder(20,0,10,0));
         mainContentPanel.add(welcomeText);
 
         JLabel instructionsText = new JLabel("Для того щоб змінити сторінку натисність одну з кнопок зверху.");
         instructionsText.setAlignmentX(Component.CENTER_ALIGNMENT);
-        instructionsText.setFont(new Font("Helvetica", Font.PLAIN, 16));
+        instructionsText.setFont(new Font("Helvetica", Font.ITALIC, 16));
         mainContentPanel.add(instructionsText);
 
-        JLabel mainText = new JLabel("Головна - повертає вас на цю сторінку");
+        JLabel mainText = new JLabel("<html><b>Головна</b> - повертає вас на цю сторінку</html>");
+        //<div style='text-align: center; width:950'>
         mainText.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(mainText);
 
-        JLabel goodsText = new JLabel("Товари - сторінка для керування групами та їх товарами");
+        JLabel goodsText = new JLabel("<html><b>Товари</b> - сторінка для керування групами та їх товарами</html>");
         goodsText.setAlignmentX(Component.CENTER_ALIGNMENT);
         goodsText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(goodsText);
 
-        JLabel statisticsText = new JLabel("Статистика - сторінка з статистичними даними");
+        JLabel statisticsText = new JLabel("<html><b>Статистика</b> - сторінка з статистичними даними</html>");
         statisticsText.setAlignmentX(Component.CENTER_ALIGNMENT);
         statisticsText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(statisticsText);
 
-        JLabel aboutText = new JLabel("Про застосунок - сторінка про програму та розробників");
+        JLabel aboutText = new JLabel("<html><b>Про застосунок</b> - сторінка про програму та розробників</html>");
         aboutText.setAlignmentX(Component.CENTER_ALIGNMENT);
         aboutText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(aboutText);
