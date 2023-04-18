@@ -148,7 +148,7 @@ public class Warehouse {
 
     /**
      * додає нову групу товарів до списку groups, якщо група з такою ж назвою ще не існує
-     * @param group
+     * @param group - група товарів
      */
     public static void addProductGroup(ProductsGroup group) {
         if (group.getName() == null || group.getName().isEmpty()) {
@@ -243,25 +243,29 @@ public class Warehouse {
      * @param groupName назва групи, до якої додається товар
      * @param product об'єкт товару, який додається
      */
-    public void addProductToGroup(String groupName, Product product) {
+    public static void addProductToGroup(String groupName, Product product) {
+        if (groupName.isEmpty() || product.getName().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Введіть назву групи і товару!");
+            return;
+        }
         // перевірка на унікальність назви товару
         for (ProductsGroup group : groups) {
             for (Product existingProduct : group.getProducts()) {
-                if (existingProduct.getName().equals(product.getName())) {
-                    System.out.println("Товар з назвою " + product.getName() + " вже існує в групі " + group.getName());
+                if (existingProduct.getName().equalsIgnoreCase(product.getName())) {
+                    JOptionPane.showMessageDialog(null,"Товар з назвою " + product.getName() + " вже існує в групі " + group.getName());
                     return;
                 }
             }
         }
         for (ProductsGroup group : groups) {
-            if (group.getName().equals(groupName)) {
+            if (group.getName().equalsIgnoreCase(groupName)) {
                 group.getProducts().add(product);
                 writeToFile();
-                System.out.println("Товар успішно додано до групи " + groupName);
+                JOptionPane.showMessageDialog(null,"Товар успішно додано до групи " + groupName);
                 return;
             }
         }
-        System.out.println("Групу товарів з назвою " + groupName + " не знайдено!");
+        JOptionPane.showMessageDialog(null,"Групу товарів з назвою " + groupName + " не знайдено!");
     }
 
     /**
