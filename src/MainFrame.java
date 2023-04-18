@@ -11,7 +11,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     //Ініціалізація складу
     Warehouse warehouse = new Warehouse();
-    String choosedGroup = null;
+    ProductsGroup choosedGroup = null;
 
     JFrame mainFrame = new JFrame();
     JPanel contentPanel = new JPanel(new GridLayout(1, 1));
@@ -130,13 +130,12 @@ public class MainFrame extends JFrame implements ActionListener {
             AddGroupUI addGroupDialog = new AddGroupUI();
             addGroupDialog.setVisible(true);
         } else if (e.getSource() == removeGroup){
-            String groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
-            int choice = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете видалити групу " + groupName + "?", "Видалити групу", JOptionPane.YES_NO_OPTION);
+            ProductsGroup choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            int choice = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете видалити групу " + choosedGroup.getName() + "?", "Видалити групу", JOptionPane.YES_NO_OPTION);
             if(choice == JOptionPane.YES_OPTION){
-                Warehouse.deleteProductsGroup(groupName);
+                warehouse.deleteProductsGroup(choosedGroup);
                 updateGroupTable();
-                choosedGroup = null;
-                JOptionPane.showMessageDialog(null, "Групу " + groupName + " успішно видалено");
+                JOptionPane.showMessageDialog(null, "Групу " + choosedGroup.getName() + " успішно видалено");
             }
         } else if (e.getSource() == editGroup){
             //Кнопка редагування групи
@@ -147,34 +146,34 @@ public class MainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == editGoods){
             //Кнопка редагування товарів
         } else if (e.getSource() == increaseGoods){
-            String groupName;
+            ProductsGroup group;
             try {
-                groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+                group = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
             } catch (Exception exception){
-                groupName = choosedGroup;
+                group = choosedGroup;
             }
 
-            String productName = (String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+            Product productName = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
             int oldQuanity = Integer.parseInt((String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 3));
 
-            warehouse.editProductQuantity(groupName, productName, oldQuanity+1);
-            updateGoodsTable(groupName);
+            warehouse.editProductQuantity(productName, oldQuanity+1);
+            updateGoodsTable(group);
         } else if (e.getSource() == decreaseGoods){
-            String groupName;
+            ProductsGroup group;
             try {
-                groupName = (String) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+                group = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
             } catch (Exception exception){
-                groupName = choosedGroup;
+                group = choosedGroup;
             }
 
-            String productName = (String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+            Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
             int oldQuanity = Integer.parseInt((String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 3));
 
             if(oldQuanity <= 0){
                 JOptionPane.showMessageDialog(null, "Значення кількості товару не може бути менше за 0", "Помилка", JOptionPane.ERROR_MESSAGE);
             } else {
-                warehouse.editProductQuantity(groupName, productName, oldQuanity-1);
-                updateGoodsTable(groupName);
+                warehouse.editProductQuantity(product, oldQuanity-1);
+                updateGoodsTable(group);
             }
         }
     }
@@ -194,7 +193,7 @@ public class MainFrame extends JFrame implements ActionListener {
             public void valueChanged(ListSelectionEvent e) {
                 ListSelectionModel lsm = (ListSelectionModel)e.getSource();
                 if ( !e.getValueIsAdjusting() && !lsm.isSelectionEmpty()) {
-                    choosedGroup = groupTable.getValueAt(groupTable.getSelectedRow(), 0).toString();
+                    choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
                     updateGoodsTable(choosedGroup);
                 }
             }
@@ -207,14 +206,14 @@ public class MainFrame extends JFrame implements ActionListener {
 
     /**
      * Метод, який оновлює таблицю товарів.
-     * @param groupTitle група, товари якої будуть зображені.
+     * @param group група, товари якої будуть зображені.
      */
-    private void updateGoodsTable(String groupTitle) {
+    private void updateGoodsTable(ProductsGroup group) {
         goodsTablePanel.removeAll();
         goodsTablePanel.revalidate();
         goodsTablePanel.repaint();
 
-        goodsTable = new JTable(GoodsParser.parseGroupGoods(warehouse.findGroupByTitle(groupTitle)), goodsColumnNames);
+        goodsTable = new JTable(GoodsParser.parseGroupGoods(group), goodsColumnNames);
         goodsTable.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
         goodsTable.getColumnModel().getColumn(1).setCellRenderer(new MyCellRenderer());
         goodsTable.getColumnModel().getColumn(2).setCellRenderer(new MyCellRenderer());
@@ -355,7 +354,7 @@ public class MainFrame extends JFrame implements ActionListener {
             public void valueChanged(ListSelectionEvent e) {
                 ListSelectionModel lsm = (ListSelectionModel)e.getSource();
                 if ( !e.getValueIsAdjusting() && !lsm.isSelectionEmpty()) {
-                    choosedGroup = groupTable.getValueAt(groupTable.getSelectedRow(), 0).toString();
+                    choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
                     updateGoodsTable(choosedGroup);
                 }
             }

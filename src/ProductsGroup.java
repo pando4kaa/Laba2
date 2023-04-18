@@ -11,11 +11,16 @@ public class ProductsGroup {
         this.products = products;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "Група книжок на тему " + name + "\n" +
                 "опис: " + description + "\n" +
                 "Товари: \n" + products;
+    }*/
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     public String getName() {

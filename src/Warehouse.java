@@ -192,6 +192,10 @@ public class Warehouse {
         System.out.println("Групу товарів з такою назвою не знайдено!");
     }
 
+    public void deleteProductsGroup(ProductsGroup group){
+        groups.remove(group);
+    }
+
     /**
      * видаляє групу товарів зі списку groups за її назвою groupName
      * @param groupName
@@ -370,22 +374,10 @@ public class Warehouse {
      * @param name
      * @param newQuantity
      */
-    public void editProductQuantity(String groupName, String name, int newQuantity) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(groupName)) {
-                for (Product product : group.getProducts()) {
-                    if (product.getName().equals(name)) {
-                        product.setQuantity(newQuantity);
-                        writeToFile();
-                        System.out.println("Товар успішно відредаговано!");
-                        return;
-                    }
-                }
-                System.out.println("Товар з такою назвою не знайдено!");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
+    public void editProductQuantity(Product product, int newQuantity) {
+        product.setQuantity(newQuantity);
+        writeToFile();
+        System.out.println("Товар успішно відредаговано!");
     }
 
     /**
