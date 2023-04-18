@@ -141,7 +141,8 @@ public class MainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == editGroup){
             //Кнопка редагування групи
         } else if (e.getSource() == addGoods){
-            //Кнопка додавання товарів
+            AddProductToGroupUI addProductDialog = new AddProductToGroupUI();
+            addProductDialog.setVisible(true);
         } else if (e.getSource() == removeGoods){
             //Кнопка видалення товарів
         } else if (e.getSource() == editGoods){
