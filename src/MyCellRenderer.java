@@ -9,6 +9,8 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
 public class MyCellRenderer extends JTextArea implements TableCellRenderer {
+
+    int maxHeight = 0;
     public MyCellRenderer() {
         setLineWrap(true);
         setWrapStyleWord(true);
@@ -30,9 +32,11 @@ public class MyCellRenderer extends JTextArea implements TableCellRenderer {
             setForeground(table.getForeground());
             setBackground(table.getBackground());
         }
+
         setSize(table.getColumnModel().getColumn(column).getWidth(),
                 getPreferredSize().height);
-        if (table.getRowHeight(row) != getPreferredSize().height) {
+
+        if (table.getRowHeight(row) < getPreferredSize().height) {
             table.setRowHeight(row, getPreferredSize().height);
         }
 

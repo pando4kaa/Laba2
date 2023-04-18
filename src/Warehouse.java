@@ -382,21 +382,13 @@ public class Warehouse {
 
     /**
      * cпочатку знаходить групу товарів, а потім видаляє сам товар з цієї групи, якщо він їй належить.
-     * @param productName
+     * @param group
+     * @param product
      */
-    public void deleteProduct(String productName) {
-        for (ProductsGroup group : groups) { // проходимось по всіх групах товарів
-            for (Product product : group.getProducts()) { // проходимось по всіх товарах у групі
-                if (product.getName().equals(productName)) { // якщо знайдено товар з такою ж назвою
-                    group.getProducts().remove(product); // видаляємо товар з групи
-                    writeToFile();
-                    System.out.println("Товар успішно видалено!");
-                    return;
-                }
-            }
-            System.out.println("Товар з такою назвою не знайдено!");
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
+    public void deleteProduct(ProductsGroup group, Product product) {
+        group.getProducts().remove(product); // видаляємо товар з групи
+        writeToFile();
+        System.out.println("Товар успішно видалено!");
     }
 
     /**

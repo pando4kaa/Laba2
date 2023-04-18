@@ -27,7 +27,7 @@ public class MainFrame extends JFrame implements ActionListener {
     JTable groupTable = new JTable();
 
     String[] columnNames = {"Назва", "Опис"};
-    String[] goodsColumnNames = {"Назва", "Автор", "Опис", "Кількість", "Ціна"};
+    String[] goodsColumnNames = {"Назва", "Автор", "Опис", "Видавництво", "Кількість", "Ціна"};
 
     JPanel goodsTablePanel;
     JPanel groupTablePanel;
@@ -129,9 +129,8 @@ public class MainFrame extends JFrame implements ActionListener {
             clearContentPanel();
             initAboutPage();
         } else if (e.getSource() == addGroup){
-            AddGroupUI addGroupDialog = new AddGroupUI();
+            AddGroupUI addGroupDialog = new AddGroupUI(this, warehouse);
             addGroupDialog.setVisible(true);
-            updateGroupTable();
         } else if (e.getSource() == removeGroup){
             ProductsGroup choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
             int choice = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете видалити групу " + choosedGroup.getName() + "?", "Видалити групу", JOptionPane.YES_NO_OPTION);
@@ -143,40 +142,23 @@ public class MainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == editGroup){
             //Кнопка редагування групи
         } else if (e.getSource() == addGoods){
-            ProductsGroup group;
-            try {
-                group = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
-            } catch (Exception exception){
-                group = choosedGroup;
-            }
-
             AddProductToGroupUI addProductDialog = new AddProductToGroupUI(choosedGroup, warehouse, this);
             addProductDialog.setVisible(true);
         } else if (e.getSource() == removeGoods){
-            //Кнопка видалення товарів
+            Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+            warehouse.deleteProduct(choosedGroup, product);
+            updateGoodsTable();
         } else if (e.getSource() == editGoods){
-            //Кнопка редагування товарів
+            Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+            AddProductToGroupUI addProductToGroupUI = new AddProductToGroupUI(product, choosedGroup,  warehouse, this);
+            addProductToGroupUI.setVisible(true);
         } else if (e.getSource() == increaseGoods){
-            ProductsGroup group;
-            try {
-                group = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
-            } catch (Exception exception){
-                group = choosedGroup;
-            }
-
             Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
             int oldQuanity = product.getQuantity();
 
             warehouse.editProductQuantity(product, oldQuanity+1);
-            updateGoodsTable(group);
+            updateGoodsTable();
         } else if (e.getSource() == decreaseGoods){
-            ProductsGroup group;
-            try {
-                group = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
-            } catch (Exception exception){
-                group = choosedGroup;
-            }
-
             Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
             int oldQuanity = product.getQuantity();
 
@@ -184,7 +166,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Значення кількості товару не може бути менше за 0", "Помилка", JOptionPane.ERROR_MESSAGE);
             } else {
                 warehouse.editProductQuantity(product, oldQuanity-1);
-                updateGoodsTable(group);
+                updateGoodsTable();
             }
         }
     }
@@ -193,7 +175,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
      Метод, який оновлює таблицю груп.
      */
-    private void updateGroupTable() {
+    protected void updateGroupTable() {
         groupTablePanel.removeAll();
         groupTablePanel.revalidate();
         groupTablePanel.repaint();
@@ -205,7 +187,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 ListSelectionModel lsm = (ListSelectionModel)e.getSource();
                 if ( !e.getValueIsAdjusting() && !lsm.isSelectionEmpty()) {
                     choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
-                    updateGoodsTable(choosedGroup);
+                    updateGoodsTable();
                 }
             }
         });
@@ -217,9 +199,15 @@ public class MainFrame extends JFrame implements ActionListener {
 
     /**
      * Метод, який оновлює таблицю товарів.
-     * @param group група, товари якої будуть зображені.
      */
-    protected void updateGoodsTable(ProductsGroup group) {
+    protected void updateGoodsTable() {
+        ProductsGroup group;
+        try {
+            group = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+        } catch (Exception exception){
+            group = choosedGroup;
+        }
+
         goodsTablePanel.removeAll();
         goodsTablePanel.revalidate();
         goodsTablePanel.repaint();
@@ -227,7 +215,7 @@ public class MainFrame extends JFrame implements ActionListener {
         goodsTable.removeAll();
         goodsTable = new JTable(GoodsParser.parseGroupGoods(group), goodsColumnNames);
         MyCellRenderer cellRenderer = new MyCellRenderer();
-        for(int i = 0; i < goodsTable.getColumnCount()-2; i++){
+        for(int i = 0; i < goodsTable.getColumnCount(); i++){
             goodsTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
         }
 
@@ -357,7 +345,7 @@ public class MainFrame extends JFrame implements ActionListener {
             JScrollPane goodsTableScroll = new JScrollPane(goodsTable);
             goodsTablePanel.add(goodsTableScroll);
         } else {
-            updateGoodsTable(choosedGroup);
+            updateGoodsTable();
         }
 
         //Створення слухача для реакції на вибір рядка в таблиці з групами
@@ -367,7 +355,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 ListSelectionModel lsm = (ListSelectionModel)e.getSource();
                 if ( !e.getValueIsAdjusting() && !lsm.isSelectionEmpty()) {
                     choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
-                    updateGoodsTable(choosedGroup);
+                    updateGoodsTable();
                 }
             }
         });

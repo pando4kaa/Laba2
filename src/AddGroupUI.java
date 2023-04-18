@@ -13,15 +13,20 @@ public class AddGroupUI extends JFrame {
     private JTextArea groupNameField, groupDescriptionField;
     private JButton cancelButton,addGroupButton;
 
+    MainFrame frame;
+    Warehouse warehouse;
     /**
      * Конструктор класу AddGroupUI. Встановлює параметри вікна і додає графічний інтерфейс
      */
-    public AddGroupUI() {
+    public AddGroupUI(MainFrame frame, Warehouse warehouse) {
         super("Додати нову групу товарів");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         setSize(400, 400);
         setLocationRelativeTo(null);
+
+        this.warehouse = warehouse;
+        this.frame = frame;
 
         addGroupUI();//додати елементи на панель
         getContentPane().add(panel); //додати панель на вікно
@@ -121,5 +126,6 @@ public class AddGroupUI extends JFrame {
         String groupDescription = groupDescriptionField.getText();
         ProductsGroup group = new ProductsGroup(groupName, groupDescription);
         Warehouse.addProductGroup(group);
+        frame.updateGroupTable();
     }
 }

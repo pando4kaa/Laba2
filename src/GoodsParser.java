@@ -15,14 +15,15 @@ public class GoodsParser {
 
     public static Object[][] parseGroupGoods(ProductsGroup groupByTitle) {
         List<Product> products = groupByTitle.products;
-        Object[][] result = new Object[products.size()][5];
+        Object[][] result = new Object[products.size()][6];
 
         for(int i = 0; i < products.size(); i++){
             result[i][0] = products.get(i);
             result[i][1] = products.get(i).getAuthor();
             result[i][2] = products.get(i).getDescription();
-            result[i][3] = Integer.toString(products.get(i).getQuantity());
-            result[i][4] = Double.toString(products.get(i).getPrice());
+            result[i][3] = products.get(i).getPublisher();
+            result[i][4] = Integer.toString(products.get(i).getQuantity());
+            result[i][5] = Double.toString(products.get(i).getPrice());
         }
         return result;
     }

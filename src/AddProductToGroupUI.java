@@ -12,6 +12,7 @@ public class AddProductToGroupUI extends JFrame {
     private ProductsGroup groupAddTo;
     private Warehouse warehouse;
     private MainFrame frame;
+    private Product editProduct;
 
     public AddProductToGroupUI(ProductsGroup groupAddTo, Warehouse warehouse, MainFrame frame) {
         super("Додати товар до групи");
@@ -26,6 +27,59 @@ public class AddProductToGroupUI extends JFrame {
         this.groupAddTo = groupAddTo;
         this.warehouse = warehouse;
         this.frame = frame;
+    }
+
+    public AddProductToGroupUI(Product product, ProductsGroup productsGroup, Warehouse warehouse, MainFrame mainFrame) {
+        super("Додати товар до групи");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        setSize(600, 700);
+        setLocationRelativeTo(null);
+
+        this.groupAddTo = productsGroup;
+        this.warehouse = warehouse;
+        this.frame = mainFrame;
+        this.editProduct = product;
+        addProductToGroupUI(editProduct); // додати елементи на панель
+        getContentPane().add(panel); // додати панель на вікно
+    }
+
+    private void addProductToGroupUI(Product product) {
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        addProductName();
+        addProductDescription();
+        addProductAuthor();
+        addProductPublisher();
+        addProductQuantity();
+        addProductPrice();
+
+        // колір фону полів вводу
+        JTextArea[] fields = {productNameField, productDescriptionField,
+                productAuthorField, productPublisherField, productQuantityField,
+                productPriceField};
+
+        productNameField.setText(product.getName());
+        productDescriptionField.setText(product.getDescription());
+        productAuthorField.setText(product.getAuthor());
+        productPublisherField.setText(product.getPublisher());
+        productQuantityField.setText(Integer.toString(product.getQuantity()));
+        productPriceField.setText(Double.toString(product.getPrice()));
+
+        for (JTextArea field : fields) {
+            field.setBackground(new Color(196, 212, 236));
+        }
+
+
+        // додавання кнопок
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.add(Box.createHorizontalGlue());
+        addProductButton(buttonPanel);
+        buttonPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        cancelButton(buttonPanel);
+        buttonPanel.add(Box.createHorizontalGlue());
+        panel.add(buttonPanel);
     }
 
     private void addProductToGroupUI() {
@@ -163,11 +217,36 @@ public class AddProductToGroupUI extends JFrame {
         addProductButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addProductToGroup();
+                if(editProduct == null){
+                    addProductToGroup();
+                } else {
+                    editProduct();
+                }
                 dispose();
             }
         });
         buttonPanel.add(addProductButton);
+    }
+
+    private void editProduct() {
+        String productName = productNameField.getText();
+        String productDescription = productDescriptionField.getText();
+        String productAuthor = productAuthorField.getText();
+        String productPublisher = productPublisherField.getText();
+        int productQuantity = Integer.parseInt(productQuantityField.getText());
+        double productPrice = Double.parseDouble(productPriceField.getText());
+
+        // створення нового продукту і додавання його до групи товарів
+        int index = groupAddTo.products.indexOf(editProduct);
+
+        if(productQuantity < 0){
+            JOptionPane.showMessageDialog(this,"Кількість товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
+        } else if (productPrice < 0.0) {
+            JOptionPane.showMessageDialog(this,"Ціна товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
+        } else {
+            groupAddTo.products.set(index, new Product(productName, productAuthor, productDescription, productPublisher, productQuantity, productPrice));
+        }
+        frame.updateGoodsTable();
     }
 
     private void cancelButton(JPanel buttonPanel) {
@@ -190,9 +269,14 @@ public class AddProductToGroupUI extends JFrame {
         int productQuantity = Integer.parseInt(productQuantityField.getText());
         double productPrice = Double.parseDouble(productPriceField.getText());
 
-        // створення нового продукту і додавання його до групи товарів
-        Product product = new Product(productName, productAuthor, productDescription,  productPublisher, productQuantity, productPrice);
-        warehouse.addProductToGroup(groupAddTo, product);
-        frame.updateGoodsTable(frame.choosedGroup);
+        if(productQuantity < 0){
+            JOptionPane.showMessageDialog(this,"Кількість товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
+        } else if (productPrice < 0.0) {
+            JOptionPane.showMessageDialog(this,"Ціна товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Product product = new Product(productName, productAuthor, productDescription,  productPublisher, productQuantity, productPrice);
+            warehouse.addProductToGroup(groupAddTo, product);
+        }
+        frame.updateGoodsTable();
     }
 }
