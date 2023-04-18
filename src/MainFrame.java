@@ -3,6 +3,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -129,6 +131,7 @@ public class MainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == addGroup){
             AddGroupUI addGroupDialog = new AddGroupUI();
             addGroupDialog.setVisible(true);
+            updateGroupTable();
         } else if (e.getSource() == removeGroup){
             ProductsGroup choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
             int choice = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете видалити групу " + choosedGroup.getName() + "?", "Видалити групу", JOptionPane.YES_NO_OPTION);
@@ -140,7 +143,14 @@ public class MainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == editGroup){
             //Кнопка редагування групи
         } else if (e.getSource() == addGoods){
-            AddProductToGroupUI addProductDialog = new AddProductToGroupUI();
+            ProductsGroup group;
+            try {
+                group = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+            } catch (Exception exception){
+                group = choosedGroup;
+            }
+
+            AddProductToGroupUI addProductDialog = new AddProductToGroupUI(choosedGroup, warehouse, this);
             addProductDialog.setVisible(true);
         } else if (e.getSource() == removeGoods){
             //Кнопка видалення товарів
@@ -154,10 +164,10 @@ public class MainFrame extends JFrame implements ActionListener {
                 group = choosedGroup;
             }
 
-            Product productName = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
-            int oldQuanity = Integer.parseInt((String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 3));
+            Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+            int oldQuanity = product.getQuantity();
 
-            warehouse.editProductQuantity(productName, oldQuanity+1);
+            warehouse.editProductQuantity(product, oldQuanity+1);
             updateGoodsTable(group);
         } else if (e.getSource() == decreaseGoods){
             ProductsGroup group;
@@ -168,7 +178,7 @@ public class MainFrame extends JFrame implements ActionListener {
             }
 
             Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
-            int oldQuanity = Integer.parseInt((String) goodsTable.getValueAt(goodsTable.getSelectedRow(), 3));
+            int oldQuanity = product.getQuantity();
 
             if(oldQuanity <= 0){
                 JOptionPane.showMessageDialog(null, "Значення кількості товару не може бути менше за 0", "Помилка", JOptionPane.ERROR_MESSAGE);
@@ -209,27 +219,28 @@ public class MainFrame extends JFrame implements ActionListener {
      * Метод, який оновлює таблицю товарів.
      * @param group група, товари якої будуть зображені.
      */
-    private void updateGoodsTable(ProductsGroup group) {
+    protected void updateGoodsTable(ProductsGroup group) {
         goodsTablePanel.removeAll();
         goodsTablePanel.revalidate();
         goodsTablePanel.repaint();
 
+        goodsTable.removeAll();
         goodsTable = new JTable(GoodsParser.parseGroupGoods(group), goodsColumnNames);
-        goodsTable.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
-        goodsTable.getColumnModel().getColumn(1).setCellRenderer(new MyCellRenderer());
-        goodsTable.getColumnModel().getColumn(2).setCellRenderer(new MyCellRenderer());
+        MyCellRenderer cellRenderer = new MyCellRenderer();
+        for(int i = 0; i < goodsTable.getColumnCount()-2; i++){
+            goodsTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+        }
 
-        goodsTable.getColumnModel().getColumn(2).setMinWidth(100);
-        goodsTable.getColumnModel().getColumn(2).setMinWidth(75);
         goodsTable.getColumnModel().getColumn(2).setMinWidth(200);
-        goodsTable.getColumnModel().getColumn(3).setMaxWidth(50);
-        goodsTable.getColumnModel().getColumn(4).setMaxWidth(50);
+        goodsTable.getColumnModel().getColumn(3).setWidth(50);
+        goodsTable.getColumnModel().getColumn(4).setWidth(50);
 
         goodsTable.setShowGrid(true);
         goodsTable.setGridColor(Color.BLACK);
 
         JScrollPane goodsTableScrollLambda = new JScrollPane(goodsTable);
-        goodsTablePanel.add(goodsTableScrollLambda);;
+        goodsTablePanel.add(goodsTableScrollLambda);
+        System.out.println("dsafsdfdsa");
     }
 
     /**

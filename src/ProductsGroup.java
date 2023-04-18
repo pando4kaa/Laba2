@@ -1,14 +1,15 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsGroup {
     private String name; //назва групи товарів
     private String description; //опис групи товарів
-    public List<Product> products;
+    public ArrayList<Product> products;
 
-    public ProductsGroup(String name, String description, List<Product> products) {
+    public ProductsGroup(String name, String description) {
         this.name = name;
         this.description = description;
-        this.products = products;
+        this.products = new ArrayList<>();
     }
 
     /*@Override
@@ -39,11 +40,11 @@ public class ProductsGroup {
         this.description = description;
     }
 
-    public List<Product> getProducts() {
+    public ArrayList<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(ArrayList<Product> products) {
         this.products = products;
     }
 }

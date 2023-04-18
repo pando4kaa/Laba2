@@ -119,7 +119,7 @@ public class AddGroupUI extends JFrame {
     private void addProductGroup() {
         String groupName = groupNameField.getText();
         String groupDescription = groupDescriptionField.getText();
-        ProductsGroup group = new ProductsGroup(groupName, groupDescription, new ArrayList<>());
+        ProductsGroup group = new ProductsGroup(groupName, groupDescription);
         Warehouse.addProductGroup(group);
     }
 }

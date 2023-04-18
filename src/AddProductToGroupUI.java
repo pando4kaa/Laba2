@@ -5,10 +5,15 @@ import java.awt.event.*;
 public class AddProductToGroupUI extends JFrame {
     // елементи вікна
     private JPanel panel = new JPanel();
-    private JLabel groupNameLabel, productNameLabel, productDescriptionLabel, productAuthorLabel, productPublisherLabel, productQuantityLabel, productPriceLabel;
-    private JTextArea groupNameField, productNameField, productDescriptionField, productAuthorField, productPublisherField, productQuantityField, productPriceField;
+    private JLabel productNameLabel, productDescriptionLabel, productAuthorLabel, productPublisherLabel, productQuantityLabel, productPriceLabel;
+    private JTextArea productNameField, productDescriptionField, productAuthorField, productPublisherField, productQuantityField, productPriceField;
     private JButton cancelButton, addProductButton;
-    public AddProductToGroupUI() {
+
+    private ProductsGroup groupAddTo;
+    private Warehouse warehouse;
+    private MainFrame frame;
+
+    public AddProductToGroupUI(ProductsGroup groupAddTo, Warehouse warehouse, MainFrame frame) {
         super("Додати товар до групи");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -17,12 +22,15 @@ public class AddProductToGroupUI extends JFrame {
 
         addProductToGroupUI(); // додати елементи на панель
         getContentPane().add(panel); // додати панель на вікно
+
+        this.groupAddTo = groupAddTo;
+        this.warehouse = warehouse;
+        this.frame = frame;
     }
 
     private void addProductToGroupUI() {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        addGroupName();
         addProductName();
         addProductDescription();
         addProductAuthor();
@@ -31,7 +39,7 @@ public class AddProductToGroupUI extends JFrame {
         addProductPrice();
 
         // колір фону полів вводу
-        JTextArea[] fields = {groupNameField, productNameField, productDescriptionField,
+        JTextArea[] fields = {productNameField, productDescriptionField,
                 productAuthorField, productPublisherField, productQuantityField,
                 productPriceField};
 
@@ -51,22 +59,6 @@ public class AddProductToGroupUI extends JFrame {
         panel.add(buttonPanel);
     }
 
-
-    private void addGroupName() {
-        // додавання назви групи товарів
-        groupNameLabel = new JLabel("Назва групи товарів:");
-        groupNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        groupNameLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        groupNameLabel.setForeground(new Color(42, 48, 119));
-        panel.add(groupNameLabel);
-
-        // додавання поля вводу назви групи товарів
-        groupNameField = new JTextArea(2, 20);
-        groupNameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, groupNameField.getPreferredSize().height));
-        groupNameField.setAlignmentX(Component.CENTER_ALIGNMENT);
-        groupNameField.setFont(new Font("Helvetica", Font.ITALIC, 16));
-        panel.add(groupNameField);
-    }
     private void addProductName() {
         // додавання назви товару
         productNameLabel = new JLabel("Назва товару:");
@@ -96,6 +88,8 @@ public class AddProductToGroupUI extends JFrame {
         productDescriptionField.setMaximumSize(new Dimension(Integer.MAX_VALUE, productDescriptionField.getPreferredSize().height));
         productDescriptionField.setAlignmentX(Component.CENTER_ALIGNMENT);
         productDescriptionField.setFont(new Font("Helvetica", Font.ITALIC, 16));
+        productDescriptionField.setLineWrap(true);
+        productDescriptionField.setWrapStyleWord(true);
         JScrollPane descriptionScrollPane = new JScrollPane(productDescriptionField);
         descriptionScrollPane.setPreferredSize(new Dimension(500, 200));
         descriptionScrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -189,7 +183,6 @@ public class AddProductToGroupUI extends JFrame {
         buttonPanel.add(cancelButton);
     }
     private void addProductToGroup() {
-        String groupName = groupNameField.getText();
         String productName = productNameField.getText();
         String productDescription = productDescriptionField.getText();
         String productAuthor = productAuthorField.getText();
@@ -198,7 +191,8 @@ public class AddProductToGroupUI extends JFrame {
         double productPrice = Double.parseDouble(productPriceField.getText());
 
         // створення нового продукту і додавання його до групи товарів
-        Product product = new Product(productName, productDescription, productAuthor, productPublisher, productQuantity, productPrice);
-        Warehouse.addProductToGroup(groupName, product);
+        Product product = new Product(productName, productAuthor, productDescription,  productPublisher, productQuantity, productPrice);
+        warehouse.addProductToGroup(groupAddTo, product);
+        frame.updateGoodsTable(frame.choosedGroup);
     }
 }
