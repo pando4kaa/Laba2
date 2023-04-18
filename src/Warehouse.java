@@ -436,6 +436,23 @@ public class Warehouse {
         }
     }
 
+    /**
+     * метод пошуку товару за назвою або автором
+     * @param name - назва книги
+     * @param author - автор
+     * @return список знайдених продуктів
+     */
+    public ArrayList<Product> searchProduct(String name, String author) {
+        ArrayList<Product> foundProducts = new ArrayList<>();
+        for (ProductsGroup group : groups) {
+            for (Product product : group.getProducts()) {
+                if (product.getName().equalsIgnoreCase(name) || product.getAuthor().equalsIgnoreCase(author)) {
+                    foundProducts.add(product);
+                }
+            }
+        }
+        return foundProducts;
+    }
 }
 
 
