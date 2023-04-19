@@ -3,8 +3,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -132,48 +130,90 @@ public class MainFrame extends JFrame implements ActionListener {
             AddGroupUI addGroupDialog = new AddGroupUI(this, warehouse);
             addGroupDialog.setVisible(true);
         } else if (e.getSource() == removeGroup){
-            ProductsGroup choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
-            int choice = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете видалити групу " + choosedGroup.getName() + "?", "Видалити групу", JOptionPane.YES_NO_OPTION);
-            if(choice == JOptionPane.YES_OPTION){
-                warehouse.deleteProductsGroup(choosedGroup);
-                updateGroupTable();
-                JOptionPane.showMessageDialog(null, "Групу " + choosedGroup.getName() + " успішно видалено");
+            try {
+                ProductsGroup choosedGroup = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+                int choice = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете видалити групу " + choosedGroup.getName() + "?", "Видалити групу", JOptionPane.YES_NO_OPTION);
+                if(choice == JOptionPane.YES_OPTION){
+                    warehouse.deleteProductsGroup(choosedGroup);
+                    updateGroupTable();
+                    JOptionPane.showMessageDialog(null, "Групу " + choosedGroup.getName() + " успішно видалено");
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Спочатку оберіть групу!", "Помилка", JOptionPane.ERROR_MESSAGE);
             }
+
         } else if (e.getSource() == editGroup){
-            //Кнопка редагування групи
-        } else if (e.getSource() == addGoods){
-            AddProductToGroupUI addProductDialog = new AddProductToGroupUI(choosedGroup, warehouse, this);
-            addProductDialog.setVisible(true);
-        } else if (e.getSource() == removeGoods){
-            Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
-            warehouse.deleteProduct(choosedGroup, product);
-            updateGoodsTable();
-        } else if (e.getSource() == editGoods){
-            Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
-            AddProductToGroupUI addProductToGroupUI = new AddProductToGroupUI(product, choosedGroup,  warehouse, this);
-            addProductToGroupUI.setVisible(true);
-        } else if (e.getSource() == increaseGoods){
-            Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
-            int oldQuanity = product.getQuantity();
-
-            warehouse.editProductQuantity(product, oldQuanity+1);
-            updateGoodsTable();
-        } else if (e.getSource() == decreaseGoods){
-            Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
-            int oldQuanity = product.getQuantity();
-
-            if(oldQuanity <= 0){
-                JOptionPane.showMessageDialog(null, "Значення кількості товару не може бути менше за 0", "Помилка", JOptionPane.ERROR_MESSAGE);
-            } else {
-                warehouse.editProductQuantity(product, oldQuanity-1);
-                updateGoodsTable();
+            try {
+                ProductsGroup group = (ProductsGroup) groupTable.getValueAt(groupTable.getSelectedRow(), 0);
+                AddGroupUI editGroupUI = new AddGroupUI(group,this, warehouse);
+                editGroupUI.setVisible(true);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Спочатку оберіть групу!", "Помилка", JOptionPane.ERROR_MESSAGE);
             }
+
+        } else if (e.getSource() == addGoods){
+            if (choosedGroup!=null){
+                AddProductToGroupUI addProductDialog = new AddProductToGroupUI(choosedGroup, warehouse, this);
+                addProductDialog.setVisible(true);
+            } else{
+                JOptionPane.showMessageDialog(null, "Спочатку оберіть групу!", "Помилка", JOptionPane.ERROR_MESSAGE);
+
+            }
+
+        } else if (e.getSource() == removeGoods){
+            try {
+                Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+                int choice = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете видалити товар " + product.getName() + "?", "Видалити товар", JOptionPane.YES_NO_OPTION);
+                if(choice == JOptionPane.YES_OPTION){
+                    warehouse.deleteProduct(choosedGroup, product);
+                    updateGoodsTable();
+                    JOptionPane.showMessageDialog(null, "Групу " + choosedGroup.getName() + " успішно видалено");
+                }
+
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Спочатку оберіть товар!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else if (e.getSource() == editGoods){
+            try {
+                Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+                AddProductToGroupUI addProductToGroupUI = new AddProductToGroupUI(product, choosedGroup,  warehouse, this);
+                addProductToGroupUI.setVisible(true);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Спочатку оберіть товар!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else if (e.getSource() == increaseGoods){
+            try {
+                Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+                int oldQuanity = product.getQuantity();
+
+                warehouse.editProductQuantity(product, oldQuanity+1);
+                updateGoodsTable();
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Спочатку оберіть товар!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else if (e.getSource() == decreaseGoods){
+            try {
+                Product product = (Product) goodsTable.getValueAt(goodsTable.getSelectedRow(), 0);
+                int oldQuanity = product.getQuantity();
+
+                if(oldQuanity <= 0){
+                    JOptionPane.showMessageDialog(null, "Значення кількості товару не може бути менше за 0", "Помилка", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    warehouse.editProductQuantity(product, oldQuanity-1);
+                    updateGoodsTable();
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Спочатку оберіть товар!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+
         }
     }
 
     /**
-
-     Метод, який оновлює таблицю груп.
+     * Метод, який оновлює таблицю груп.
      */
     protected void updateGroupTable() {
         groupTablePanel.removeAll();

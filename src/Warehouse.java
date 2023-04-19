@@ -133,15 +133,14 @@ public class Warehouse {
      * додає нову групу товарів до списку groups, якщо група з такою ж назвою ще не існує
      * @param group - група товарів
      */
-    public static void addProductGroup(ProductsGroup group) {
+    public static void addProductGroup(ProductsGroup group) throws Exception {
         if (group.getName() == null || group.getName().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Не введено назву групи товарів!");
-            return;
+            throw new Exception("Не введено назву групи товарів!");
         }
         for (ProductsGroup existingGroup : groups) {
             if (existingGroup.getName().equalsIgnoreCase(group.getName())) {
-                JOptionPane.showMessageDialog(null,"Група товарів з такою назвою вже існує.");
-                return;
+                throw new Exception("Група товарів з такою назвою вже існує.");
+
             }
         }
         groups.add(group);

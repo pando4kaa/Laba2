@@ -30,7 +30,7 @@ public class AddProductToGroupUI extends JFrame {
     }
 
     public AddProductToGroupUI(Product product, ProductsGroup productsGroup, Warehouse warehouse, MainFrame mainFrame) {
-        super("Додати товар до групи");
+        super("Редагувати товар");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         setSize(600, 700);
@@ -189,7 +189,7 @@ public class AddProductToGroupUI extends JFrame {
         panel.add(productQuantityLabel);
 
         //додавання поля вводу кількості книжок
-        productQuantityField = new JTextArea(2, 20);
+        productQuantityField = new JTextArea("0",2, 20);
         productQuantityField.setMaximumSize(new Dimension(Integer.MAX_VALUE, productNameField.getPreferredSize().height));
         productQuantityField.setAlignmentX(Component.CENTER_ALIGNMENT);
         productQuantityField.setFont(new Font("Helvetica", Font.ITALIC, 16));
@@ -204,7 +204,7 @@ public class AddProductToGroupUI extends JFrame {
         panel.add(productPriceLabel);
 
         //додавання поля вводу ціни за екземпляр
-        productPriceField = new JTextArea(2, 20);
+        productPriceField = new JTextArea("0.0",2, 20);
         productPriceField.setMaximumSize(new Dimension(Integer.MAX_VALUE, productNameField.getPreferredSize().height));
         productPriceField.setAlignmentX(Component.CENTER_ALIGNMENT);
         productPriceField.setFont(new Font("Helvetica", Font.ITALIC, 16));
@@ -222,7 +222,7 @@ public class AddProductToGroupUI extends JFrame {
                 } else {
                     editProduct();
                 }
-                dispose();
+
             }
         });
         buttonPanel.add(addProductButton);
@@ -233,20 +233,43 @@ public class AddProductToGroupUI extends JFrame {
         String productDescription = productDescriptionField.getText();
         String productAuthor = productAuthorField.getText();
         String productPublisher = productPublisherField.getText();
-        int productQuantity = Integer.parseInt(productQuantityField.getText());
-        double productPrice = Double.parseDouble(productPriceField.getText());
-
+        int productQuantity = 0;
+        double productPrice = 0.0;
+        boolean parseSuccess = true;
+        try {
+            productQuantity = Integer.parseInt(productQuantityField.getText());
+        } catch (NumberFormatException e) {
+            if (!productQuantityField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Некоректне введення кількості товару! Введіть ціле число!", "Помилка", JOptionPane.ERROR_MESSAGE);
+                parseSuccess = false;
+            }  else productQuantity = 0;
+        }
+        try {
+            productPrice = Double.parseDouble(productPriceField.getText());
+        } catch (NumberFormatException e) {
+            if (!productPriceField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Некоректне введення ціни товару! Введіть число!", "Помилка", JOptionPane.ERROR_MESSAGE);
+                parseSuccess = false;
+            } else productPrice = 0.0;
+        }
         // створення нового продукту і додавання його до групи товарів
         int index = groupAddTo.products.indexOf(editProduct);
-
-        if(productQuantity < 0){
-            JOptionPane.showMessageDialog(this,"Кількість товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
-        } else if (productPrice < 0.0) {
-            JOptionPane.showMessageDialog(this,"Ціна товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
-        } else {
+        if (productQuantity>=0 && productPrice>=0.0 && parseSuccess && !productName.isEmpty()) {
             groupAddTo.products.set(index, new Product(productName, productAuthor, productDescription, productPublisher, productQuantity, productPrice));
+            frame.updateGoodsTable();
+            dispose();
+        } else {
+            if (productQuantity < 0) {
+                JOptionPane.showMessageDialog(this, "Кількість товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+            if (productPrice < 0.0) {
+                JOptionPane.showMessageDialog(this, "Ціна товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+            if (productName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Назва товару не може бути порожньою!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        frame.updateGoodsTable();
+
     }
 
     private void cancelButton(JPanel buttonPanel) {
@@ -266,17 +289,42 @@ public class AddProductToGroupUI extends JFrame {
         String productDescription = productDescriptionField.getText();
         String productAuthor = productAuthorField.getText();
         String productPublisher = productPublisherField.getText();
-        int productQuantity = Integer.parseInt(productQuantityField.getText());
-        double productPrice = Double.parseDouble(productPriceField.getText());
+        int productQuantity = 0;
+        double productPrice = 0.0;
+        boolean parseSuccess = true;
+        try {
+            productQuantity = Integer.parseInt(productQuantityField.getText());
+        } catch (NumberFormatException e) {
+            if (!productQuantityField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Некоректне введення кількості товару! Введіть ціле число!", "Помилка", JOptionPane.ERROR_MESSAGE);
+                parseSuccess = false;
+            }  else productQuantity = 0;
+        }
+        try {
+            productPrice = Double.parseDouble(productPriceField.getText());
+        } catch (NumberFormatException e) {
+            if (!productPriceField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Некоректне введення ціни товару! Введіть число!", "Помилка", JOptionPane.ERROR_MESSAGE);
+                parseSuccess = false;
+            } else productPrice = 0.0;
+        }
 
-        if(productQuantity < 0){
-            JOptionPane.showMessageDialog(this,"Кількість товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
-        } else if (productPrice < 0.0) {
-            JOptionPane.showMessageDialog(this,"Ціна товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
-        } else {
+        if (productQuantity>=0 && productPrice>=0.0 && parseSuccess && !productName.isEmpty()) {
             Product product = new Product(productName, productAuthor, productDescription,  productPublisher, productQuantity, productPrice);
             warehouse.addProductToGroup(groupAddTo, product);
+            frame.updateGoodsTable();
+            dispose();
+        } else {
+            if (productQuantity < 0) {
+                JOptionPane.showMessageDialog(this, "Кількість товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+            if (productPrice < 0.0) {
+                JOptionPane.showMessageDialog(this, "Ціна товару не можу бути відʼємна!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+            if (productName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Назва товару не може бути порожньою!", "Помилка", JOptionPane.ERROR_MESSAGE);
+            }
+
         }
-        frame.updateGoodsTable();
     }
 }
