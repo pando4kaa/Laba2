@@ -300,7 +300,7 @@ public class Warehouse {
     }
 
     /**
-     * знаходить товар за назвою name в групі товарів groupName та змінює його опис на newDescription
+     * знаходить товар за назвою name в групі товарів groupName та змінює його опис на newDescription)
      * @param groupName
      * @param name
      * @param newDescription
