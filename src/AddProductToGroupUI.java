@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -13,6 +15,8 @@ public class AddProductToGroupUI extends JFrame {
     private Warehouse warehouse;
     private MainFrame frame;
     private Product editProduct;
+
+    Color mainColor = new Color(231, 231, 231);
 
     public AddProductToGroupUI(ProductsGroup groupAddTo, Warehouse warehouse, MainFrame frame) {
         super("Додати товар до групи");
@@ -66,8 +70,11 @@ public class AddProductToGroupUI extends JFrame {
         productQuantityField.setText(Integer.toString(product.getQuantity()));
         productPriceField.setText(Double.toString(product.getPrice()));
 
+
+        //Настя придумала
         for (JTextArea field : fields) {
-            field.setBackground(new Color(196, 212, 236));
+            field.setBackground(mainColor);
+            field.setMargin(new Insets(10, 5, 10, 5));
         }
 
 
@@ -98,7 +105,8 @@ public class AddProductToGroupUI extends JFrame {
                 productPriceField};
 
         for (JTextArea field : fields) {
-            field.setBackground(new Color(196, 212, 236));
+            field.setBackground(mainColor);
+            field.setMargin(new Insets(10, 5, 10, 5));
         }
 
 
@@ -118,7 +126,7 @@ public class AddProductToGroupUI extends JFrame {
         productNameLabel = new JLabel("Назва товару:");
         productNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         productNameLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        productNameLabel.setForeground(new Color(42, 48, 119));
+        productNameLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productNameLabel);
 
         // додавання поля вводу назви товару
@@ -134,7 +142,7 @@ public class AddProductToGroupUI extends JFrame {
         productDescriptionLabel = new JLabel("Опис товару:");
         productDescriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         productDescriptionLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        productDescriptionLabel.setForeground(new Color(42, 48, 119));
+        productDescriptionLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productDescriptionLabel);
 
         //додавання поля вводу опису товару з можливістю прокрутки
@@ -154,7 +162,7 @@ public class AddProductToGroupUI extends JFrame {
         productAuthorLabel = new JLabel("Автор книги:");
         productAuthorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         productAuthorLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        productAuthorLabel.setForeground(new Color(42, 48, 119));
+        productAuthorLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productAuthorLabel);
 
         //додавання поля для вводу автора книги
@@ -170,7 +178,7 @@ public class AddProductToGroupUI extends JFrame {
         productPublisherLabel = new JLabel("Видавництво:");
         productPublisherLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         productPublisherLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        productPublisherLabel.setForeground(new Color(42, 48, 119));
+        productPublisherLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productPublisherLabel);
 
         //додавання поля вводу видавництва
@@ -185,7 +193,7 @@ public class AddProductToGroupUI extends JFrame {
         productQuantityLabel = new JLabel("Кількість на складі:");
         productQuantityLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         productQuantityLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        productQuantityLabel.setForeground(new Color(42, 48, 119));
+        productQuantityLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productQuantityLabel);
 
         //додавання поля вводу кількості книжок
@@ -200,7 +208,7 @@ public class AddProductToGroupUI extends JFrame {
         productPriceLabel = new JLabel("Ціна за екземпляр:");
         productPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         productPriceLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        productPriceLabel.setForeground(new Color(42, 48, 119));
+        productPriceLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productPriceLabel);
 
         //додавання поля вводу ціни за екземпляр

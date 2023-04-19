@@ -419,19 +419,10 @@ public class Warehouse {
      */
     public static void writeToFile(){
         try {
-            FileWriter fileWriter = new FileWriter("src/test.txt");
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            int index = 1;
+            FileWriter fileWriter = new FileWriter("src/Output.txt");
             for (ProductsGroup group : groups) {
-                index = 0;
-                bufferedWriter.write("Група товарів \""+group.getName()+"\"");
-                bufferedWriter.newLine();
-                bufferedWriter.write("\t"+(index++)+"Опис: "+group.getDescription());
-                bufferedWriter.newLine();
-                bufferedWriter.write("\t"+(index++)+"Опис: "+group.getDescription());
-                bufferedWriter.newLine();
+                fileWriter.write(group.toStr());
             }
-                fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
