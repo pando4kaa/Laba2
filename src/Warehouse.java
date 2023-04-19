@@ -451,10 +451,10 @@ public class Warehouse {
         } else {
             allProducts = getAllProducts().toArray(new Product[0]);
             if(!name.isEmpty()){
-                allProducts = Stream.of(allProducts).filter(product -> product.getName().equalsIgnoreCase(name)).toArray(Product[]::new);
+                allProducts = Stream.of(allProducts).filter(product -> product.getName().toLowerCase().contains(name.toLowerCase())).toArray(Product[]::new);
             }
             if(!author.isEmpty()){
-                allProducts = Stream.of(allProducts).filter(product -> product.getAuthor().equalsIgnoreCase(author)).toArray(Product[]::new);
+                allProducts = Stream.of(allProducts).filter(product -> product.getAuthor().toLowerCase().contains(author.toLowerCase())).toArray(Product[]::new);
             }
 
             resultArray = new Product[allProducts.length][1];
