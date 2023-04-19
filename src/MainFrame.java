@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -12,6 +13,7 @@ public class MainFrame extends JFrame implements ActionListener {
     //Ініціалізація складу
     Warehouse warehouse = new Warehouse();
     ProductsGroup choosedGroup = null;
+    Product choosedFoundProduct;
 
     JFrame mainFrame = new JFrame();
     JPanel contentPanel = new JPanel(new GridLayout(1, 1));
@@ -20,15 +22,20 @@ public class MainFrame extends JFrame implements ActionListener {
     JButton goodsPage;
     JButton statisticsPage;
     JButton aboutPage;
+    JButton findPage;
 
     JTable goodsTable = new JTable();
     JTable groupTable = new JTable();
+    JTable foundProductTable = new JTable();
 
     String[] columnNames = {"Назва", "Опис"};
     String[] goodsColumnNames = {"Назва", "Автор", "Опис", "Видавництво", "Кількість", "Ціна"};
 
     JPanel goodsTablePanel;
+    JPanel findProductTablePanel;
     JPanel groupTablePanel;
+
+    JPanel productInfoPanel;
 
     //Goods page buttons
     JButton addGroup;
@@ -41,6 +48,18 @@ public class MainFrame extends JFrame implements ActionListener {
 
     JButton increaseGoods;
     JButton decreaseGoods;
+
+    JButton findProducts;
+
+    JLabel foundProductName = new JLabel();
+    JLabel foundProductAuthor = new JLabel();
+    JTextArea foundProductDescription = new JTextArea();
+    JLabel foundProductPublisher = new JLabel();
+    JLabel foundProductQuanity = new JLabel();
+    JLabel foundProductPrice = new JLabel();
+
+    JTextField nameField;
+    JTextField authorField;
 
     /**
      * Конструктор класу, який створює вікно.
@@ -89,6 +108,8 @@ public class MainFrame extends JFrame implements ActionListener {
         mainPage = new JButton("Головна");
 
         goodsPage = new JButton("Товари");
+        
+        findPage = new JButton("Пошук");
 
         statisticsPage = new JButton("Статистика");
 
@@ -96,6 +117,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
         menuBar.add(mainPage);
         menuBar.add(goodsPage);
+        menuBar.add(findPage);
         menuBar.add(statisticsPage);
         menuBar.add(aboutPage);
         
@@ -104,6 +126,7 @@ public class MainFrame extends JFrame implements ActionListener {
         goodsPage.addActionListener(this);
         statisticsPage.addActionListener(this);
         aboutPage.addActionListener(this);
+        findPage.addActionListener(this);
 
         mainFrame.add(menuBar, BorderLayout.NORTH);
     }
@@ -117,9 +140,12 @@ public class MainFrame extends JFrame implements ActionListener {
         if(e.getSource() == mainPage){
             clearContentPanel();
             initMainPageContent();
-        } else if(e.getSource() == goodsPage){
+        } else if(e.getSource() == goodsPage) {
             clearContentPanel();
             initGoodsPage();
+        } else if (e.getSource() == findPage) {
+            clearContentPanel();
+            initFindPage();
         } else if (e.getSource() == statisticsPage) {
             clearContentPanel();
             initStatisticsPage();
@@ -208,8 +234,136 @@ public class MainFrame extends JFrame implements ActionListener {
             } catch (ArrayIndexOutOfBoundsException ex) {
                 JOptionPane.showMessageDialog(null, "Спочатку оберіть товар!", "Помилка", JOptionPane.ERROR_MESSAGE);
             }
-
+        } else if (e.getSource() == findProducts) {
+            findProductTablePanel.removeAll();
+            findProductTablePanel.revalidate();
+            findProductTablePanel.repaint();
+            initFoundProductTable(warehouse.findProdctsByNameAndAuthor(nameField.getText(), authorField.getText()));
+            System.out.println("Назва:"+nameField.getText().isEmpty());
+            System.out.println("Автор:"+authorField.getText().isEmpty());
         }
+    }
+
+    private void initFindPage() {
+        JPanel findPageContent = new JPanel();
+        findPageContent.setLayout(new GridLayout(1, 3));
+
+        //Ліва частина
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.X_AXIS));
+
+        JPanel fieldsForFinding = new JPanel();
+
+        GroupLayout groupLayoutLeft = new GroupLayout(fieldsForFinding);
+        fieldsForFinding.setLayout(groupLayoutLeft);
+        groupLayoutLeft.setAutoCreateGaps(true);
+        groupLayoutLeft.setAutoCreateContainerGaps(true);
+
+        JLabel nameLabel = new JLabel("Назва:");
+        JLabel authorLabel = new JLabel("Автор:");
+
+        nameField = new JTextField();
+        nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
+        authorField = new JTextField();
+        authorField.setMaximumSize(new Dimension(Integer.MAX_VALUE, authorField.getPreferredSize().height));
+
+        groupLayoutLeft.setHorizontalGroup(groupLayoutLeft.createSequentialGroup()
+                .addGroup(groupLayoutLeft.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addComponent(nameLabel)
+                        .addComponent(authorLabel))
+                .addGroup(groupLayoutLeft.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addComponent(nameField)
+                        .addComponent(authorField)));
+
+        groupLayoutLeft.setVerticalGroup(groupLayoutLeft.createSequentialGroup()
+                .addGroup(groupLayoutLeft.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addComponent(nameLabel)
+                        .addComponent(nameField))
+                .addGroup(groupLayoutLeft.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addComponent(authorLabel)
+                        .addComponent(authorField)));
+
+        findProducts = new JButton("Знайти");
+        findProducts.addActionListener(this);
+
+        leftPanel.add(fieldsForFinding);
+        leftPanel.add(findProducts);
+
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+
+        findProductTablePanel = new JPanel();
+        findProductTablePanel.setLayout(new GridLayout(1, 1));
+        findProductTablePanel.setBorder(new EtchedBorder());
+
+        initFoundProductTable(new Object[][]{});
+        centerPanel.add(findProductTablePanel);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(Color.RED);
+        rightPanel.setLayout(new GridLayout(1, 1));
+
+        productInfoPanel = new JPanel();
+        productInfoPanel.setLayout(new BoxLayout(productInfoPanel, BoxLayout.PAGE_AXIS));
+
+        initProductInfoPanel(null);
+        rightPanel.add(productInfoPanel);
+
+        findPageContent.add(leftPanel);
+        findPageContent.add(centerPanel);
+        findPageContent.add(rightPanel);
+
+        contentPanel.add(findPageContent);
+    }
+
+    private void initProductInfoPanel(Product product) {
+        if(product != null){
+            foundProductName.setText("Назва: "+product.getName());
+            foundProductName.setHorizontalTextPosition(SwingConstants.LEFT);
+            foundProductAuthor.setText("Автор: "+product.getAuthor());
+            foundProductDescription = new JTextArea(product.getDescription());
+            foundProductPublisher.setText("Видавництво: "+product.getPublisher());
+            foundProductQuanity.setText("Кількість на складі: "+product.getQuantity());
+            foundProductPrice.setText("Ціна за одиницю: "+ product.getPrice());
+
+            foundProductDescription.setEditable(false);
+            foundProductDescription.setLineWrap(true);
+
+            JScrollPane scrollPane = new JScrollPane(foundProductDescription);
+
+            productInfoPanel.add(foundProductName);
+            productInfoPanel.add(foundProductAuthor);
+
+            productInfoPanel.add(foundProductPublisher);
+            productInfoPanel.add(foundProductQuanity);
+            productInfoPanel.add(foundProductPrice);
+            JLabel desclabel = new JLabel("Опис");
+            productInfoPanel.add(desclabel);
+            productInfoPanel.add(scrollPane);
+        }
+    }
+
+    private void initFoundProductTable(Object[][] array) {
+        foundProductTable = new JTable(array, new String[]{"Продукт"});
+        foundProductTable.setShowGrid(true);
+        foundProductTable.setGridColor(Color.BLACK);
+
+        foundProductTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+                if ( !e.getValueIsAdjusting() && !lsm.isSelectionEmpty()) {
+                    choosedFoundProduct = (Product) foundProductTable.getValueAt(foundProductTable.getSelectedRow(), 0);
+                    productInfoPanel.removeAll();
+                    productInfoPanel.revalidate();
+                    productInfoPanel.repaint();
+                    initProductInfoPanel(choosedFoundProduct);
+                }
+            }
+        });
+
+        JScrollPane scrollPane = new JScrollPane(foundProductTable);
+        findProductTablePanel.add(scrollPane);
     }
 
     /**
@@ -268,7 +422,6 @@ public class MainFrame extends JFrame implements ActionListener {
 
         JScrollPane goodsTableScrollLambda = new JScrollPane(goodsTable);
         goodsTablePanel.add(goodsTableScrollLambda);
-        System.out.println("dsafsdfdsa");
     }
 
     /**

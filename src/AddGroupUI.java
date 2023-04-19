@@ -194,8 +194,8 @@ public class AddGroupUI extends JFrame {
         if (groupName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Назва групи не може бути порожньою!", "Помилка", JOptionPane.ERROR_MESSAGE);
         } else {
-            int index = warehouse.getGroups().indexOf(editGroup);
-            warehouse.getGroups().set(index, new ProductsGroup(groupName, groupDescription));
+            editGroup.setName(groupName);
+            editGroup.setDescription(groupDescription);
             frame.updateGroupTable();
             dispose();
         }

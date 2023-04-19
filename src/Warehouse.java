@@ -1,9 +1,11 @@
 import javax.swing.*;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Warehouse {
     private static ArrayList<ProductsGroup> groups = new ArrayList<>();
@@ -418,8 +420,16 @@ public class Warehouse {
     public static void writeToFile(){
         try {
             FileWriter fileWriter = new FileWriter("src/test.txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            int index = 1;
             for (ProductsGroup group : groups) {
-                fileWriter.write(group + "\n");
+                index = 0;
+                bufferedWriter.write("Група товарів \""+group.getName()+"\"");
+                bufferedWriter.newLine();
+                bufferedWriter.write("\t"+(index++)+"Опис: "+group.getDescription());
+                bufferedWriter.newLine();
+                bufferedWriter.write("\t"+(index++)+"Опис: "+group.getDescription());
+                bufferedWriter.newLine();
             }
                 fileWriter.close();
         } catch (IOException e) {
@@ -433,16 +443,36 @@ public class Warehouse {
      * @param author - автор
      * @return список знайдених продуктів
      */
-    public ArrayList<Product> searchProduct(String name, String author) {
-        ArrayList<Product> foundProducts = new ArrayList<>();
-        for (ProductsGroup group : groups) {
-            for (Product product : group.getProducts()) {
-                if (product.getName().equalsIgnoreCase(name) || product.getAuthor().equalsIgnoreCase(author)) {
-                    foundProducts.add(product);
-                }
+    public Product[][] findProdctsByNameAndAuthor(String name, String author) {
+        Product[] allProducts;
+        Product[][] resultArray;
+        if(author.isEmpty() && name.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Поля назви і автора порожні!", "Помилка", JOptionPane.ERROR_MESSAGE);
+        } else {
+            allProducts = getAllProducts().toArray(new Product[0]);
+            if(!name.isEmpty()){
+                allProducts = Stream.of(allProducts).filter(product -> product.getName().equalsIgnoreCase(name)).toArray(Product[]::new);
             }
+            if(!author.isEmpty()){
+                allProducts = Stream.of(allProducts).filter(product -> product.getAuthor().equalsIgnoreCase(author)).toArray(Product[]::new);
+            }
+
+            resultArray = new Product[allProducts.length][1];
+
+            for (int i = 0; i < allProducts.length; i++){
+                resultArray[i][0] = allProducts[i];
+            }
+            return resultArray;
         }
-        return foundProducts;
+        return null;
+    }
+
+    private ArrayList<Product> getAllProducts() {
+        ArrayList<Product> products = new ArrayList<>();
+        for (ProductsGroup group : groups){
+            products.addAll(group.products);
+        }
+        return products;
     }
 }
 

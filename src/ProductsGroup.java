@@ -12,6 +12,12 @@ public class ProductsGroup {
         this.products = new ArrayList<>();
     }
 
+    public ProductsGroup(String name, String description, ArrayList<Product> products) {
+        this.name = name;
+        this.description = description;
+        this.products = products;
+    }
+
     /*@Override
     public String toString() {
         return "Група книжок на тему " + name + "\n" +
