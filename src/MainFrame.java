@@ -461,6 +461,8 @@ public class MainFrame extends JFrame implements ActionListener {
         goodsTablePanel.revalidate();
         goodsTablePanel.repaint();
 
+        goodsTablePanel.setBackground(secondColor);
+
         goodsTable.removeAll();
         goodsTable = new JTable(GoodsParser.parseGroupGoods(group), goodsColumnNames);
         goodsTable.setBackground(tableBackground);
