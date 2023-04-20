@@ -1,8 +1,11 @@
 /**
  * Authors: Tuhai Anastasia, Rafikov Rinat
  * File: ProductGroup.java
- * Class, that describes ProductsGroup.
+ *
+ * Цей клас представляє групу товарів - групу книг на певну тему, яка містить назву, опис та список книг.
+ * Клас має конструктори, методи доступу та зміни полів об'єкта, а також методи перетворення об'єкта у рядок для виводу на екран.
  */
+
 import java.util.ArrayList;
 
 public class ProductsGroup {

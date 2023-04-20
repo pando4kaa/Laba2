@@ -1,8 +1,11 @@
 /**
  * Authors: Tuhai Anastasia, Rafikov Rinat
  * File: Product.java
- * Class, that describes a product.
+ *
+ * Цей клас представляє продукт - книгу, яка має ім'я, автора, опис, видавництво, кількість на складі та ціну.
+ * Клас містить конструктор, методи доступу та зміни полів об'єкта, а також методи перетворення об'єкта у рядок для виводу на екран.
  */
+
 public class Product {
     private String name;
     private String author;

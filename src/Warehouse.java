@@ -1,8 +1,14 @@
 /**
  * Authors: Tuhai Anastasia, Rafikov Rinat
  * File: Warehouse.java
- * Class, that describes a warehouse.
+ *
+ * Клас Warehouse є складом для продуктів і забезпечує зберігання та управління ними.
+ * Він містить методи для додавання нових продуктів та груп, видалення продуктів і груп,
+ * редагування кількості продуктів, пошуку продуктів за назвою та автором, і метод writeToFile(),
+ * який записує інформацію про продукти в файл.
+ * Клас містить ArrayList з екземплярами класу ProductsGroup і посилається на об'єкти класу Product.
  */
+
 import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;

@@ -1,8 +1,12 @@
 /**
  * Authors: Tuhai Anastasia, Rafikov Rinat
  * File: GoodsParser.java
- * Class, that parses lists with groups and products and returns in 2D array for JTables.
+ *
+ * Клас GoodsParser містить методи для отримання даних про товари зі складу у вигляді двовимірних масивів.
+ * Методи parseGroups, parseGroupGoods та parseAllGoods повертають дані про групи товарів,
+ * товари в групі та всі товари відповідно. Метод getGroupPrices повертає інформацію про загальну вартість товарів у групі.
  */
+
 import java.util.List;
 
 public class GoodsParser {

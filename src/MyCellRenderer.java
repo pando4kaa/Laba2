@@ -1,11 +1,12 @@
 /**
- * Академічно доброчесно взято з форуму oracle.com
- */
-/**
  * Authors: Tuhai Anastasia, Rafikov Rinat
  * File: MyCellRenderer.java
- * Class, that sets cell render for a table cells.
+ *
+ * Відповідає за відображення текстових даних у відповідному стовпці таблиці.
+ * Якщо текст дуже довгий, то він автоматично переноситься на наступний рядок,
+ * а висота рядка таблиці збільшується відповідно.
  */
+
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;

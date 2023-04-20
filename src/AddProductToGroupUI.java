@@ -1,8 +1,13 @@
 /**
  * Authors: Tuhai Anastasia, Rafikov Rinat
  * File: AddProductToGroupUi.java
- * Class, that creates product addition or editing window.
+ *
+ * Клас AddProductToGroupUI - це вікно для додавання або редагування товарів.
+ * Вікно містить елементи, такі як поля введення назви, автора та опису групи товарів, видавництво,
+ * кількість на складі та ціну за одиницю, а також кнопки «Додати» та «Скасувати».
+ * Залежно від того, як конструктор викликається, вікно може бути призначене для додавання нового товару або для редагування існуючого.
  */
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

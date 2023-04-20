@@ -1,8 +1,12 @@
 /**
  * Authors: Tuhai Anastasia, Rafikov Rinat
  * File: Statistics.java
- * Class, that counts different statistic information.
+ *
+ * Клас Statistics містить два статичних методи для обчислення загальної вартості
+ * товарів на складі та вартості товарів у вказаній групі. Обидва методи приймають аргументи
+ * відповідного типу даних та повертають значення типу double.
  */
+
 import java.util.ArrayList;
 
 public class Statistics {

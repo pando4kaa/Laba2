@@ -1,8 +1,13 @@
 /**
  * Authors: Tuhai Anastasia, Rafikov Rinat
  * File: AddGroupUI.java
- * Class, that creates a group addition window.
+ *
+ * Клас AddGroupUI - це вікно для додавання або редагування групи товарів.
+ * Вікно містить елементи, такі як поля введення назви та опису групи товарів,
+ * а також кнопки «Додати» та «Скасувати». Залежно від того, як конструктор викликається,
+ * вікно може бути призначене для додавання нової групи товарів або для редагування існуючої групи товарів.
  */
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
