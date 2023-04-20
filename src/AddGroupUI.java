@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -14,6 +15,8 @@ public class AddGroupUI extends JFrame {
     private MainFrame frame;
     private Warehouse warehouse;
     private ProductsGroup editGroup;
+
+    Color mainColor = new Color(231, 231, 231);
 
     /**
      * Конструктор класу AddGroupUI. Встановлює параметри вікна і додає графічний інтерфейс
@@ -58,8 +61,8 @@ public class AddGroupUI extends JFrame {
         addProductDescription();
 
         //колір фону полів вводу
-        groupNameField.setBackground(new Color(196, 212, 236));
-        groupDescriptionField.setBackground(new Color(196, 212, 236));
+        groupNameField.setBackground(mainColor);
+        groupDescriptionField.setBackground(mainColor);
 
         //додавання кнопок
         JPanel buttonPanel = new JPanel();
@@ -84,8 +87,8 @@ public class AddGroupUI extends JFrame {
         groupDescriptionField.setText(group.getDescription());
 
         //колір фону полів вводу
-        groupNameField.setBackground(new Color(196, 212, 236));
-        groupDescriptionField.setBackground(new Color(196, 212, 236));
+        groupNameField.setBackground(mainColor);
+        groupDescriptionField.setBackground(mainColor);
 
         //додавання кнопок
         JPanel buttonPanel = new JPanel();
@@ -102,7 +105,7 @@ public class AddGroupUI extends JFrame {
         groupNameLabel = new JLabel("Назва групи товару:");
         groupNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         groupNameLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        groupNameLabel.setForeground(new Color(42, 48, 119));
+        groupNameLabel.setBorder(new EmptyBorder(5, 0, 5,0));
         panel.add(groupNameLabel);
 
         //додавання поля вводу назви групи товарів
@@ -118,7 +121,7 @@ public class AddGroupUI extends JFrame {
         groupDescriptionLabel = new JLabel("Опис групи товару:");
         groupDescriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         groupDescriptionLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        groupDescriptionLabel.setForeground(new Color(42, 48, 119));
+        groupDescriptionLabel.setBorder(new EmptyBorder(5, 0, 5,0));
         panel.add(groupDescriptionLabel);
 
         //додавання поля вводу опису групи товарів з можливістю прокрутки
@@ -145,12 +148,14 @@ public class AddGroupUI extends JFrame {
                 if (editGroup == null) {
                     try {
                         addProductGroup();
+                        warehouse.writeToFile();
                         dispose();
                     } catch (Exception exception) {
                         JOptionPane.showMessageDialog(null, exception.getMessage(), "Помилка", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     editGroup();
+                    warehouse.writeToFile();
                 }
 
             }
@@ -182,7 +187,7 @@ public class AddGroupUI extends JFrame {
         String groupName = groupNameField.getText();
         String groupDescription = groupDescriptionField.getText();
         ProductsGroup group = new ProductsGroup(groupName, groupDescription);
-        Warehouse.addProductGroup(group);
+        warehouse.addProductGroup(group);
         frame.updateGroupTable();
 
     }

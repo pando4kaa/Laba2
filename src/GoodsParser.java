@@ -27,4 +27,44 @@ public class GoodsParser {
         }
         return result;
     }
+
+    public static Object[][] parseAllGoods(Warehouse warehouse) {
+
+        int amountProducts = 0;
+
+        for(ProductsGroup group : warehouse.getGroups()){
+            for (Product product : group.products){
+                amountProducts++;
+            }
+        }
+
+        Object[][] result = new Object[amountProducts][7];
+
+        int index = 0;
+
+        for(ProductsGroup group : warehouse.getGroups()){
+            for (Product product : group.products){
+                result[index][0] = group;
+                result[index][1] = product;
+                result[index][2] = product.getAuthor();
+                result[index][3] = product.getDescription();
+                result[index][4] = product.getPublisher();
+                result[index][5] = Integer.toString(product.getQuantity());
+                result[index][6] = Double.toString(product.getPrice());
+                index++;
+            }
+        }
+        return result;
+    }
+
+    public static Object[][] getGroupPrices(Warehouse warehouse){
+        List<ProductsGroup> groups = warehouse.getGroups();
+        Object[][] result = new Object[groups.size()][2];
+
+        for(int i = 0; i < groups.size(); i++){
+            result[i][0] = groups.get(i);
+            result[i][1] = Statistics.calculateTotalValueByGroup(groups.get(i));
+        }
+        return result;
+    }
 }

@@ -35,20 +35,14 @@ public class Statistics {
 
     /**
      * Обчислює загальну вартість товарів в заданій групі
-     * @param groups список груп товарів
-     * @param groupName назва групи товарів, вартість якої треба розрахувати
+     * @param group група.
      * @return загальна вартість товарів в групі з вказаною назвою
      */
-    public static double calculateTotalValueByGroup(ArrayList<ProductsGroup> groups, String groupName) {
+    public static double calculateTotalValueByGroup(ProductsGroup group) {
         double totalValue = 0;
-        for (ProductsGroup group : groups) {
-            if (group.getName().equalsIgnoreCase(groupName)) {
-                for (Product product : group.getProducts()) {
-                    totalValue += product.getPrice() * product.getQuantity();
-                }
-            }
+        for (Product product : group.getProducts()) {
+            totalValue += product.getPrice() * product.getQuantity();
         }
         return totalValue;
     }
-
 }

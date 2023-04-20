@@ -7,6 +7,8 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.WatchEvent;
+import java.util.ArrayList;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -21,12 +23,13 @@ public class MainFrame extends JFrame implements ActionListener {
     JButton mainPage;
     JButton goodsPage;
     JButton statisticsPage;
-    JButton aboutPage;
     JButton findPage;
 
     JTable goodsTable = new JTable();
     JTable groupTable = new JTable();
     JTable foundProductTable = new JTable();
+    JTable groupPricesTable = new JTable();
+    JTable allPoductsTable = new JTable();
 
     String[] columnNames = {"Назва", "Опис"};
     String[] goodsColumnNames = {"Назва", "Автор", "Опис", "Видавництво", "Кількість", "Ціна"};
@@ -36,6 +39,9 @@ public class MainFrame extends JFrame implements ActionListener {
     JPanel groupTablePanel;
 
     JPanel productInfoPanel;
+
+    JPanel groupPricesTablePanel;
+    JPanel allProductsTablePanel;
 
     //Goods page buttons
     JButton addGroup;
@@ -113,19 +119,15 @@ public class MainFrame extends JFrame implements ActionListener {
 
         statisticsPage = new JButton("Статистика");
 
-        aboutPage = new JButton("Про застосунок");
-
         menuBar.add(mainPage);
         menuBar.add(goodsPage);
         menuBar.add(findPage);
         menuBar.add(statisticsPage);
-        menuBar.add(aboutPage);
         
         //Adding listeners
         mainPage.addActionListener(this);
         goodsPage.addActionListener(this);
         statisticsPage.addActionListener(this);
-        aboutPage.addActionListener(this);
         findPage.addActionListener(this);
 
         mainFrame.add(menuBar, BorderLayout.NORTH);
@@ -149,9 +151,6 @@ public class MainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == statisticsPage) {
             clearContentPanel();
             initStatisticsPage();
-        } else if (e.getSource() == aboutPage) {
-            clearContentPanel();
-            initAboutPage();
         } else if (e.getSource() == addGroup){
             AddGroupUI addGroupDialog = new AddGroupUI(this, warehouse);
             addGroupDialog.setVisible(true);
@@ -162,6 +161,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 if(choice == JOptionPane.YES_OPTION){
                     warehouse.deleteProductsGroup(choosedGroup);
                     updateGroupTable();
+                    this.choosedGroup = null;
                     JOptionPane.showMessageDialog(null, "Групу " + choosedGroup.getName() + " успішно видалено");
                 }
             } catch (ArrayIndexOutOfBoundsException ex) {
@@ -362,6 +362,10 @@ public class MainFrame extends JFrame implements ActionListener {
             }
         });
 
+        for(int i = 0; i < foundProductTable.getColumnCount(); i++){
+            foundProductTable.getColumnModel().getColumn(i).setCellRenderer(new MyCellRenderer());
+        }
+
         JScrollPane scrollPane = new JScrollPane(foundProductTable);
         findProductTablePanel.add(scrollPane);
     }
@@ -430,12 +434,12 @@ public class MainFrame extends JFrame implements ActionListener {
     private void initMainPageContent() {
         JPanel mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.PAGE_AXIS));
-        mainContentPanel.setBackground(new Color(206, 236, 246));
+        mainContentPanel.setBackground(new Color(245, 245, 245));
 
-        JLabel welcomeText = new JLabel("Вітаємо у нашій інтернет-книгарні \"ЯкаКнига\"");
+        JLabel welcomeText = new JLabel("Вітаємо на нашому складі інтернет-книгарні \"ЯкаКнига\"");
+        welcomeText.setBorder(new EmptyBorder(135, 0,10, 0));
         welcomeText.setAlignmentX(Component.CENTER_ALIGNMENT);
         welcomeText.setFont(new Font("Helvetica", Font.BOLD, 20));
-        welcomeText.setBorder(new EmptyBorder(20,0,10,0));
         mainContentPanel.add(welcomeText);
 
         JLabel instructionsText = new JLabel("Для того щоб змінити сторінку натисність одну з кнопок зверху.");
@@ -443,23 +447,22 @@ public class MainFrame extends JFrame implements ActionListener {
         instructionsText.setFont(new Font("Helvetica", Font.ITALIC, 16));
         mainContentPanel.add(instructionsText);
 
-        JLabel mainText = new JLabel("<html><b>Головна</b> - повертає вас на цю сторінку</html>");
-        //<div style='text-align: center; width:950'>
+        JLabel mainText = new JLabel("Головна - повертає вас на цю сторінку");
         mainText.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(mainText);
 
-        JLabel goodsText = new JLabel("<html><b>Товари</b> - сторінка для керування групами та їх товарами</html>");
+        JLabel goodsText = new JLabel("Товари - сторінка для керування групами та їх товарами");
         goodsText.setAlignmentX(Component.CENTER_ALIGNMENT);
         goodsText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(goodsText);
 
-        JLabel statisticsText = new JLabel("<html><b>Статистика</b> - сторінка з статистичними даними</html>");
+        JLabel statisticsText = new JLabel("Статистика - сторінка з статистичними даними");
         statisticsText.setAlignmentX(Component.CENTER_ALIGNMENT);
         statisticsText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(statisticsText);
 
-        JLabel aboutText = new JLabel("<html><b>Про застосунок</b> - сторінка про програму та розробників</html>");
+        JLabel aboutText = new JLabel("Пошук - сторінка для пошуку товарів за автором і назвою");
         aboutText.setAlignmentX(Component.CENTER_ALIGNMENT);
         aboutText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(aboutText);
@@ -468,22 +471,60 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Метод, який ініціалізує вміст сторінки "Про програму".
-     */
-    private void initAboutPage() {
-        JPanel aboutContentPanel = new JPanel();
-        aboutContentPanel.setBackground(Color.blue);
-        aboutContentPanel.setLayout(new FlowLayout());
-
-        contentPanel.add(aboutContentPanel);
-    }
-
-    /**
      * Метод, який ініціалізує вміст сторінки "Статистика".
      */
     private void initStatisticsPage() {
         JPanel statiscticsContentPanel = new JPanel();
         statiscticsContentPanel.setLayout(new BorderLayout());
+
+        JPanel statiscticsDataPanel = new JPanel();
+
+        JLabel totalValueLabel = new JLabel("Загальна вартість товару: "+
+                Math.round(Statistics.calculateTotalValue((ArrayList<ProductsGroup>) warehouse.getGroups())*100000.0)/100000.0
+                +" од.");
+
+        groupPricesTablePanel = new JPanel();
+        groupPricesTablePanel.setLayout(new GridLayout(1, 1));
+        groupPricesTablePanel.setPreferredSize(new Dimension(250, Integer.MAX_VALUE));
+
+        initGroupPricesTable();
+
+        groupPricesTablePanel.setMaximumSize(new Dimension(100, Integer.MAX_VALUE));
+
+        allProductsTablePanel = new JPanel();
+
+        allProductsTablePanel.setLayout(new GridLayout(1, 1));
+
+        initAllProductsTable();
+
+        statiscticsDataPanel.add(totalValueLabel);
+        statiscticsContentPanel.add(statiscticsDataPanel, BorderLayout.NORTH);
+        statiscticsContentPanel.add(groupPricesTablePanel, BorderLayout.WEST);
+        statiscticsContentPanel.add(allProductsTablePanel, BorderLayout.CENTER);
+        contentPanel.add(statiscticsContentPanel);
+    }
+
+    private void initAllProductsTable() {
+        allPoductsTable = new JTable(GoodsParser.parseAllGoods(warehouse), new String[]{"Група", "Назва", "Автор", "Опис", "Видавництво", "Кількість", "Ціна"});
+
+        for(int i = 0; i < allPoductsTable.getColumnCount(); i++) {
+            allPoductsTable.getColumnModel().getColumn(i).setCellRenderer(new MyCellRenderer());
+        }
+        allPoductsTable.getColumnModel().getColumn(5).setMaxWidth(75);
+        allPoductsTable.getColumnModel().getColumn(6).setMaxWidth(75);
+        
+        JScrollPane jScrollPane = new JScrollPane(allPoductsTable);
+        allProductsTablePanel.add(jScrollPane);
+    }
+
+    private void initGroupPricesTable() {
+        groupPricesTable = new JTable(GoodsParser.getGroupPrices(warehouse), new String[]{"Група", "Ціна"});
+
+        for(int i = 0; i < groupPricesTable.getColumnCount(); i++){
+            groupPricesTable.getColumnModel().getColumn(i).setCellRenderer(new MyCellRenderer());
+        }
+        JScrollPane jScrollPane = new JScrollPane(groupPricesTable);
+        groupPricesTablePanel.add(jScrollPane);
     }
 
     /**

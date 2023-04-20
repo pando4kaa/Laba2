@@ -264,6 +264,7 @@ public class AddProductToGroupUI extends JFrame {
         int index = groupAddTo.products.indexOf(editProduct);
         if (productQuantity>=0 && productPrice>=0.0 && parseSuccess && !productName.isEmpty()) {
             groupAddTo.products.set(index, new Product(productName, productAuthor, productDescription, productPublisher, productQuantity, productPrice));
+            warehouse.writeToFile();
             frame.updateGoodsTable();
             dispose();
         } else {

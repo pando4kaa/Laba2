@@ -135,7 +135,7 @@ public class Warehouse {
      * додає нову групу товарів до списку groups, якщо група з такою ж назвою ще не існує
      * @param group - група товарів
      */
-    public static void addProductGroup(ProductsGroup group) throws Exception {
+    public void addProductGroup(ProductsGroup group) throws Exception {
         if (group.getName() == null || group.getName().isEmpty()) {
             throw new Exception("Не введено назву групи товарів!");
         }
@@ -150,75 +150,9 @@ public class Warehouse {
         JOptionPane.showMessageDialog(null,"Група товарів додана успішно!");
     }
 
-    /**
-     * знаходить групу товарів за назвою oldName і змінює її на newName та опис на newDescription.
-     * @param oldName
-     * @param newName
-     * @param newDescription
-     */
-    public static void editProductsGroup(String oldName, String newName, String newDescription) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(oldName)) {
-                //перевірка, чи не міститься вже така група товарів за новою назвою
-                for (ProductsGroup existingGroup : groups) {
-                    if (existingGroup.getName().equals(newName) && !existingGroup.getName().equals(oldName)) {
-                        System.out.println("Група товарів з такою назвою вже існує!");
-                        return;
-                    }
-                }
-                group.setName(newName);
-                group.setDescription(newDescription);
-                writeToFile();
-                System.out.println("Група товарів відредагована успішно!");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
-    }
-
     public void deleteProductsGroup(ProductsGroup group){
         groups.remove(group);
-    }
-
-    /**
-     * видаляє групу товарів зі списку groups за її назвою groupName
-     * @param groupName
-     */
-    public static void deleteProductsGroup(String groupName) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(groupName)) {
-                groups.remove(group);
-                writeToFile();
-                System.out.println("Групу товарів успішно видалено");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено");
-    }
-
-    /**
-     * видаляє групу товарів та всі товари, які належать до цієї групи
-     * @param name
-     */
-    public void deleteGroupWithProducts(String name) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(name)) {
-                deleteAllProductsInGroup(group);//видаляє всі товари з групи
-                groups.remove(group);
-                writeToFile();
-                System.out.println("Група товарів та всі товари в ній видалені успішно!");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
-    }
-
-    /**
-     * видаляє всі товари з групи
-     * @param group
-     */
-    private void deleteAllProductsInGroup(ProductsGroup group) {
-        group.getProducts().clear();
+        writeToFile();
     }
 
     /**
@@ -237,115 +171,11 @@ public class Warehouse {
                 }
             }
         }
-
         groupName.products.add(product);
         writeToFile();
         JOptionPane.showMessageDialog(null,"Товар успішно додано до групи " + groupName);
     }
 
-    /**
-     * знаходить товар за назвою name в групі товарів groupName та змінює його назву на newName
-     * @param groupName
-     * @param name
-     * @param newName
-     */
-    public void editProductName(String groupName, String name, String newName) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(groupName)) {
-                for (Product product : group.getProducts()) {
-                    if (product.getName().equals(name)) {
-                        //перевірка, чи не міститься вже товар з новою назвою
-                        for (Product existingProduct : group.getProducts()) {
-                            if (existingProduct.getName().equals(newName) && !existingProduct.getName().equals(name)) {
-                                System.out.println("Товар з такою назвою вже існує!");
-                                return;
-                            }
-                        }
-                        product.setName(newName);
-                        writeToFile();
-                        System.out.println("Товар успішно відредаговано!");
-                        return;
-                    }
-                }
-                System.out.println("Товар з такою назвою не знайдено!");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
-    }
-
-    /**
-     * знаходить товар за назвою name в групі товарів groupName та змінює його автора на newAuthor
-     * @param groupName
-     * @param name
-     * @param newAuthor
-     */
-    public void editProductAuthor(String groupName, String name, String newAuthor) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(groupName)) {
-                for (Product product : group.getProducts()) {
-                    if (product.getName().equals(name)) {
-                        product.setAuthor(newAuthor);
-                        writeToFile();
-                        System.out.println("Товар успішно відредаговано!");
-                        return;
-                    }
-                }
-                System.out.println("Товар з такою назвою не знайдено!");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
-
-    }
-
-    /**
-     * знаходить товар за назвою name в групі товарів groupName та змінює його опис на newDescription)
-     * @param groupName
-     * @param name
-     * @param newDescription
-     */
-    public void editProductDescription(String groupName, String name, String newDescription) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(groupName)) {
-                for (Product product : group.getProducts()) {
-                    if (product.getName().equals(name)) {
-                        product.setDescription(newDescription);
-                        writeToFile();
-                        System.out.println("Товар успішно відредаговано!");
-                        return;
-                    }
-                }
-                System.out.println("Товар з такою назвою не знайдено!");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
-    }
-
-    /**
-     * знаходить товар за назвою name в групі товарів groupName та змінює його видавництво на newPublisher
-     * @param groupName
-     * @param name
-     * @param newPublisher
-     */
-    public void editProductPublisher(String groupName, String name, String newPublisher) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(groupName)) {
-                for (Product product : group.getProducts()) {
-                    if (product.getName().equals(name)) {
-                        product.setPublisher(newPublisher);
-                        writeToFile();
-                        System.out.println("Товар успішно відредаговано!");
-                        return;
-                    }
-                }
-                System.out.println("Товар з такою назвою не знайдено!");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
-    }
 
     /**
      * знаходить товар за назвою name в групі товарів groupName та змінює його кількість на newQuantity
@@ -355,30 +185,6 @@ public class Warehouse {
         product.setQuantity(newQuantity);
         writeToFile();
         System.out.println("Товар успішно відредаговано!");
-    }
-
-    /**
-     * знаходить товар за назвою name в групі товарів groupName та змінює його ціну на newPrice
-     * @param groupName
-     * @param name
-     * @param newPrice
-     */
-    public void editProductPrice(String groupName, String name, double newPrice) {
-        for (ProductsGroup group : groups) {
-            if (group.getName().equals(groupName)) {
-                for (Product product : group.getProducts()) {
-                    if (product.getName().equals(name)) {
-                        product.setPrice(newPrice);
-                        writeToFile();
-                        System.out.println("Товар успішно відредаговано!");
-                        return;
-                    }
-                }
-                System.out.println("Товар з такою назвою не знайдено!");
-                return;
-            }
-        }
-        System.out.println("Групу товарів з такою назвою не знайдено!");
     }
 
     /**
@@ -401,28 +207,15 @@ public class Warehouse {
     }
 
     /**
-     * Знаходить групу за назвою
-     * @param title назва шуканої групи
-     * @return група
-     */
-    public ProductsGroup findGroupByTitle(String title){
-        for (ProductsGroup existingGroup : groups) {
-            if (existingGroup.getName().equals(title)) {
-                return existingGroup;
-            }
-        }
-        return null;
-    }
-
-    /**
      *записування даних зі списку груп товарів у файл "test.txt".
      */
-    public static void writeToFile(){
+    public void writeToFile(){
         try {
             FileWriter fileWriter = new FileWriter("src/Output.txt");
             for (ProductsGroup group : groups) {
                 fileWriter.write(group.toStr());
             }
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
