@@ -27,7 +27,9 @@ public class AddGroupUI extends JFrame {
     private Warehouse warehouse;
     private ProductsGroup editGroup;
 
-    Color mainColor = new Color(231, 231, 231);
+    Color textColor = new Color(0x2F4052);
+    Color mainColor = new Color(0xD8E1E9);
+    Color secondColor = new Color(0xE7EBF1);
 
     /**
      * Конструктор класу AddGroupUI. Встановлює параметри вікна і додає графічний інтерфейс
@@ -73,16 +75,20 @@ public class AddGroupUI extends JFrame {
      */
     private void addGroupUI() {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(secondColor);
 
         addGroupName();
         addProductDescription();
 
         //колір фону полів вводу
         groupNameField.setBackground(mainColor);
+        groupNameField.setForeground(textColor);
         groupDescriptionField.setBackground(mainColor);
+        groupDescriptionField.setForeground(textColor);
 
         //додавання кнопок
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(secondColor);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         addButton(buttonPanel);
@@ -96,19 +102,21 @@ public class AddGroupUI extends JFrame {
      */
     private void addGroupUI(ProductsGroup group) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(secondColor);
 
         addGroupName();
         addProductDescription();
 
         groupNameField.setText(group.getName());
-        groupDescriptionField.setText(group.getDescription());
-
-        //колір фону полів вводу
         groupNameField.setBackground(mainColor);
+        groupNameField.setForeground(textColor);
+        groupDescriptionField.setText(group.getDescription());
         groupDescriptionField.setBackground(mainColor);
+        groupDescriptionField.setForeground(textColor);
 
         //додавання кнопок
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(secondColor);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         addButton(buttonPanel);
@@ -124,6 +132,8 @@ public class AddGroupUI extends JFrame {
     private void addGroupName() {
         //додавання назви групи товарів
         groupNameLabel = new JLabel("Назва групи товару:");
+        groupNameLabel.setBackground(secondColor);
+        groupNameLabel.setForeground(textColor);
         groupNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         groupNameLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
         groupNameLabel.setBorder(new EmptyBorder(5, 0, 5,0));
@@ -144,6 +154,8 @@ public class AddGroupUI extends JFrame {
         //додавання опису групи товарів
         groupDescriptionLabel = new JLabel("Опис групи товару:");
         groupDescriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        groupDescriptionLabel.setBackground(secondColor);
+        groupDescriptionLabel.setForeground(textColor);
         groupDescriptionLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
         groupDescriptionLabel.setBorder(new EmptyBorder(5, 0, 5,0));
         panel.add(groupDescriptionLabel);
@@ -165,6 +177,8 @@ public class AddGroupUI extends JFrame {
      */
     private void addButton(JPanel buttonPanel) {
         addGroupButton = new JButton("Додати");
+        addGroupButton.setBackground(mainColor);
+        addGroupButton.setForeground(textColor);
         addGroupButton.setFont(new Font("Helvetica", Font.BOLD, 16));
         addGroupButton.addActionListener(new ActionListener() {
             @Override
@@ -193,6 +207,8 @@ public class AddGroupUI extends JFrame {
      */
     private void cancelButton(JPanel buttonPanel) {
         cancelButton = new JButton("Скасувати");
+        cancelButton.setBackground(mainColor);
+        cancelButton.setForeground(textColor);
         cancelButton.setFont(new Font("Helvetica", Font.BOLD, 16));
         cancelButton.addActionListener(new ActionListener() {
             @Override

@@ -13,7 +13,6 @@ import java.awt.*;
 
 public class MyCellRenderer extends JTextArea implements TableCellRenderer {
 
-    int maxHeight = 0;
     public MyCellRenderer() {
         setLineWrap(true);
         setWrapStyleWord(true);

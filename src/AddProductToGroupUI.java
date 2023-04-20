@@ -25,7 +25,9 @@ public class AddProductToGroupUI extends JFrame {
     private MainFrame frame;
     private Product editProduct;
 
-    Color mainColor = new Color(231, 231, 231);
+    Color textColor = new Color(0x2F4052);
+    Color mainColor = new Color(0xD8E1E9);
+    Color secondColor = new Color(0xE7EBF1);
 
     public AddProductToGroupUI(ProductsGroup groupAddTo, Warehouse warehouse, MainFrame frame) {
         super("Додати товар до групи");
@@ -59,6 +61,7 @@ public class AddProductToGroupUI extends JFrame {
 
     private void addProductToGroupUI(Product product) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(secondColor);
 
         addProductName();
         addProductDescription();
@@ -80,8 +83,10 @@ public class AddProductToGroupUI extends JFrame {
         productPriceField.setText(Double.toString(product.getPrice()));
 
 
+
         //Настя придумала
         for (JTextArea field : fields) {
+            field.setForeground(textColor);
             field.setBackground(mainColor);
             field.setMargin(new Insets(10, 5, 10, 5));
         }
@@ -89,6 +94,7 @@ public class AddProductToGroupUI extends JFrame {
 
         // додавання кнопок
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(secondColor);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         addProductButton(buttonPanel);
@@ -100,6 +106,7 @@ public class AddProductToGroupUI extends JFrame {
 
     private void addProductToGroupUI() {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(secondColor);
 
         addProductName();
         addProductDescription();
@@ -114,6 +121,7 @@ public class AddProductToGroupUI extends JFrame {
                 productPriceField};
 
         for (JTextArea field : fields) {
+            field.setForeground(textColor);
             field.setBackground(mainColor);
             field.setMargin(new Insets(10, 5, 10, 5));
         }
@@ -121,6 +129,7 @@ public class AddProductToGroupUI extends JFrame {
 
         // додавання кнопок
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(secondColor);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         addProductButton(buttonPanel);
@@ -134,6 +143,8 @@ public class AddProductToGroupUI extends JFrame {
         // додавання назви товару
         productNameLabel = new JLabel("Назва товару:");
         productNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        productNameLabel.setForeground(textColor);
+        productNameLabel.setBackground(mainColor);
         productNameLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
         productNameLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productNameLabel);
@@ -150,6 +161,8 @@ public class AddProductToGroupUI extends JFrame {
         //додавання опису товару
         productDescriptionLabel = new JLabel("Опис товару:");
         productDescriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        productDescriptionLabel.setForeground(textColor);
+        productDescriptionLabel.setBackground(mainColor);
         productDescriptionLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
         productDescriptionLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productDescriptionLabel);
@@ -170,6 +183,8 @@ public class AddProductToGroupUI extends JFrame {
         //додавання автора книги
         productAuthorLabel = new JLabel("Автор книги:");
         productAuthorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        productAuthorLabel.setForeground(textColor);
+        productAuthorLabel.setBackground(mainColor);
         productAuthorLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
         productAuthorLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productAuthorLabel);
@@ -185,6 +200,8 @@ public class AddProductToGroupUI extends JFrame {
     private void addProductPublisher() {
         //додавання книжкового видавництва
         productPublisherLabel = new JLabel("Видавництво:");
+        productPublisherLabel.setForeground(textColor);
+        productPublisherLabel.setBackground(mainColor);
         productPublisherLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         productPublisherLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
         productPublisherLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
@@ -201,6 +218,8 @@ public class AddProductToGroupUI extends JFrame {
         //додавання кількості книжок
         productQuantityLabel = new JLabel("Кількість на складі:");
         productQuantityLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        productQuantityLabel.setForeground(textColor);
+        productQuantityLabel.setBackground(mainColor);
         productQuantityLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
         productQuantityLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productQuantityLabel);
@@ -216,6 +235,8 @@ public class AddProductToGroupUI extends JFrame {
         //додавання ціни за екземпляр
         productPriceLabel = new JLabel("Ціна за екземпляр:");
         productPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        productPriceLabel.setForeground(textColor);
+        productPriceLabel.setBackground(mainColor);
         productPriceLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
         productPriceLabel.setBorder(new EmptyBorder(5, 0, 5, 0));
         panel.add(productPriceLabel);
@@ -230,6 +251,8 @@ public class AddProductToGroupUI extends JFrame {
 
     private void addProductButton(JPanel buttonPanel) {
         addProductButton = new JButton("Додати");
+        addProductButton.setForeground(textColor);
+        addProductButton.setBackground(mainColor);
         addProductButton.setFont(new Font("Helvetica", Font.BOLD, 16));
         addProductButton.addActionListener(new ActionListener() {
             @Override
@@ -292,6 +315,8 @@ public class AddProductToGroupUI extends JFrame {
 
     private void cancelButton(JPanel buttonPanel) {
         cancelButton = new JButton("Скасувати");
+        cancelButton.setForeground(textColor);
+        cancelButton.setBackground(mainColor);
         cancelButton.setFont(new Font("Helvetica", Font.BOLD, 16));
         cancelButton.addActionListener(new ActionListener() {
             @Override
