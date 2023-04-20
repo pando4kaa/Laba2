@@ -1,7 +1,11 @@
 /**
  * Академічно доброчесно взято з форуму oracle.com
  */
-
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: MyCellRenderer.java
+ * Class, that sets cell render for a table cells.
+ */
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;

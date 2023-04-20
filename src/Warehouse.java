@@ -1,9 +1,12 @@
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: Warehouse.java
+ * Class, that describes a warehouse.
+ */
 import javax.swing.*;
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 

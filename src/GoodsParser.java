@@ -1,4 +1,8 @@
-import javax.swing.table.TableModel;
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: GoodsParser.java
+ * Class, that parses lists with groups and products and returns in 2D array for JTables.
+ */
 import java.util.List;
 
 public class GoodsParser {

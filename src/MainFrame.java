@@ -1,3 +1,9 @@
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: MainFrame.java
+ * Class, that creates MainFrame.
+ */
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
@@ -7,10 +13,15 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.WatchEvent;
 import java.util.ArrayList;
 
 public class MainFrame extends JFrame implements ActionListener {
+
+    Color textColor = new Color(0x2F4052);
+    Color mainColor = new Color(0xD8E1E9);
+    Color secondColor = new Color(0xE7EBF1);
+    Color thirdColor = new Color(0x759EB8);
+    Color tableBackground = new Color(0xE7EAF3);
 
     //Ініціалізація складу
     Warehouse warehouse = new Warehouse();
@@ -107,17 +118,30 @@ public class MainFrame extends JFrame implements ActionListener {
      */
     private void initMenuBar() {
         JMenuBar menuBar = new JMenuBar();
+        menuBar.setBackground(thirdColor);
         menuBar.setBorderPainted(false);
         menuBar.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         //Creating menu buttons
         mainPage = new JButton("Головна");
+        mainPage.setFocusable(false);
+        mainPage.setBackground(mainColor);
+        mainPage.setForeground(textColor);
 
         goodsPage = new JButton("Товари");
+        goodsPage.setFocusable(false);
+        goodsPage.setBackground(mainColor);
+        goodsPage.setForeground(textColor);
         
         findPage = new JButton("Пошук");
+        findPage.setFocusable(false);
+        findPage.setBackground(mainColor);
+        findPage.setForeground(textColor);
 
         statisticsPage = new JButton("Статистика");
+        statisticsPage.setFocusable(false);
+        statisticsPage.setBackground(mainColor);
+        statisticsPage.setForeground(textColor);
 
         menuBar.add(mainPage);
         menuBar.add(goodsPage);
@@ -246,13 +270,16 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private void initFindPage() {
         JPanel findPageContent = new JPanel();
+        findPageContent.setBackground(secondColor);
         findPageContent.setLayout(new GridLayout(1, 3));
 
         //Ліва частина
         JPanel leftPanel = new JPanel();
+        leftPanel.setBackground(secondColor);
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.X_AXIS));
 
         JPanel fieldsForFinding = new JPanel();
+        fieldsForFinding.setBackground(secondColor);
 
         GroupLayout groupLayoutLeft = new GroupLayout(fieldsForFinding);
         fieldsForFinding.setLayout(groupLayoutLeft);
@@ -284,15 +311,20 @@ public class MainFrame extends JFrame implements ActionListener {
                         .addComponent(authorField)));
 
         findProducts = new JButton("Знайти");
+        findProducts.setFocusable(false);
+        findProducts.setForeground(textColor);
+        findProducts.setBackground(mainColor);
         findProducts.addActionListener(this);
 
         leftPanel.add(fieldsForFinding);
         leftPanel.add(findProducts);
 
         JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(secondColor);
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 
         findProductTablePanel = new JPanel();
+        findProductTablePanel.setBackground(secondColor);
         findProductTablePanel.setLayout(new GridLayout(1, 1));
         findProductTablePanel.setBorder(new EtchedBorder());
 
@@ -304,6 +336,7 @@ public class MainFrame extends JFrame implements ActionListener {
         rightPanel.setLayout(new GridLayout(1, 1));
 
         productInfoPanel = new JPanel();
+        productInfoPanel.setBackground(secondColor);
         productInfoPanel.setLayout(new BoxLayout(productInfoPanel, BoxLayout.PAGE_AXIS));
 
         initProductInfoPanel(null);
@@ -319,17 +352,30 @@ public class MainFrame extends JFrame implements ActionListener {
     private void initProductInfoPanel(Product product) {
         if(product != null){
             foundProductName.setText("Назва: "+product.getName());
-            foundProductName.setHorizontalTextPosition(SwingConstants.LEFT);
+            foundProductName.setForeground(textColor);
+            foundProductName.setBackground(secondColor);
             foundProductAuthor.setText("Автор: "+product.getAuthor());
+            foundProductAuthor.setForeground(textColor);
+            foundProductAuthor.setBackground(secondColor);
             foundProductDescription = new JTextArea(product.getDescription());
             foundProductPublisher.setText("Видавництво: "+product.getPublisher());
+            foundProductPublisher.setForeground(textColor);
+            foundProductPublisher.setBackground(secondColor);
             foundProductQuanity.setText("Кількість на складі: "+product.getQuantity());
+            foundProductQuanity.setForeground(textColor);
+            foundProductQuanity.setBackground(secondColor);
             foundProductPrice.setText("Ціна за одиницю: "+ product.getPrice());
+            foundProductPrice.setForeground(textColor);
+            foundProductPrice.setBackground(secondColor);
 
             foundProductDescription.setEditable(false);
             foundProductDescription.setLineWrap(true);
+            foundProductDescription.setOpaque(true);
+            foundProductDescription.setForeground(textColor);
+            foundProductDescription.setBackground(secondColor);
 
             JScrollPane scrollPane = new JScrollPane(foundProductDescription);
+            scrollPane.getViewport().setBackground(mainColor);
 
             productInfoPanel.add(foundProductName);
             productInfoPanel.add(foundProductAuthor);
@@ -347,6 +393,10 @@ public class MainFrame extends JFrame implements ActionListener {
         foundProductTable = new JTable(array, new String[]{"Продукт"});
         foundProductTable.setShowGrid(true);
         foundProductTable.setGridColor(Color.BLACK);
+        foundProductTable.setBackground(tableBackground);
+        foundProductTable.setOpaque(false);
+        foundProductTable.getTableHeader().setBackground(mainColor);
+        foundProductTable.getTableHeader().setForeground(textColor);
 
         foundProductTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -367,6 +417,7 @@ public class MainFrame extends JFrame implements ActionListener {
         }
 
         JScrollPane scrollPane = new JScrollPane(foundProductTable);
+        scrollPane.getViewport().setBackground(tableBackground);
         findProductTablePanel.add(scrollPane);
     }
 
@@ -412,6 +463,9 @@ public class MainFrame extends JFrame implements ActionListener {
 
         goodsTable.removeAll();
         goodsTable = new JTable(GoodsParser.parseGroupGoods(group), goodsColumnNames);
+        goodsTable.setBackground(tableBackground);
+        goodsTable.getTableHeader().setBackground(mainColor);
+        goodsTable.getTableHeader().setForeground(textColor);
         MyCellRenderer cellRenderer = new MyCellRenderer();
         for(int i = 0; i < goodsTable.getColumnCount(); i++){
             goodsTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
@@ -425,6 +479,7 @@ public class MainFrame extends JFrame implements ActionListener {
         goodsTable.setGridColor(Color.BLACK);
 
         JScrollPane goodsTableScrollLambda = new JScrollPane(goodsTable);
+        goodsTableScrollLambda.getViewport().setBackground(tableBackground);
         goodsTablePanel.add(goodsTableScrollLambda);
     }
 
@@ -434,35 +489,41 @@ public class MainFrame extends JFrame implements ActionListener {
     private void initMainPageContent() {
         JPanel mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.PAGE_AXIS));
-        mainContentPanel.setBackground(new Color(245, 245, 245));
+        mainContentPanel.setBackground(secondColor);
 
         JLabel welcomeText = new JLabel("Вітаємо на нашому складі інтернет-книгарні \"ЯкаКнига\"");
         welcomeText.setBorder(new EmptyBorder(135, 0,10, 0));
+        welcomeText.setForeground(textColor);
         welcomeText.setAlignmentX(Component.CENTER_ALIGNMENT);
         welcomeText.setFont(new Font("Helvetica", Font.BOLD, 20));
         mainContentPanel.add(welcomeText);
 
         JLabel instructionsText = new JLabel("Для того щоб змінити сторінку натисність одну з кнопок зверху.");
+        instructionsText.setForeground(textColor);
         instructionsText.setAlignmentX(Component.CENTER_ALIGNMENT);
         instructionsText.setFont(new Font("Helvetica", Font.ITALIC, 16));
         mainContentPanel.add(instructionsText);
 
         JLabel mainText = new JLabel("Головна - повертає вас на цю сторінку");
+        mainText.setForeground(textColor);
         mainText.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(mainText);
 
         JLabel goodsText = new JLabel("Товари - сторінка для керування групами та їх товарами");
+        goodsText.setForeground(textColor);
         goodsText.setAlignmentX(Component.CENTER_ALIGNMENT);
         goodsText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(goodsText);
 
         JLabel statisticsText = new JLabel("Статистика - сторінка з статистичними даними");
+        statisticsText.setForeground(textColor);
         statisticsText.setAlignmentX(Component.CENTER_ALIGNMENT);
         statisticsText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(statisticsText);
 
         JLabel aboutText = new JLabel("Пошук - сторінка для пошуку товарів за автором і назвою");
+        aboutText.setForeground(textColor);
         aboutText.setAlignmentX(Component.CENTER_ALIGNMENT);
         aboutText.setFont(new Font("Helvetica", Font.PLAIN, 16));
         mainContentPanel.add(aboutText);
@@ -475,15 +536,21 @@ public class MainFrame extends JFrame implements ActionListener {
      */
     private void initStatisticsPage() {
         JPanel statiscticsContentPanel = new JPanel();
+        statiscticsContentPanel.setBackground(secondColor);
         statiscticsContentPanel.setLayout(new BorderLayout());
 
         JPanel statiscticsDataPanel = new JPanel();
+        statiscticsDataPanel.setBackground(secondColor);
 
         JLabel totalValueLabel = new JLabel("Загальна вартість товару: "+
                 Math.round(Statistics.calculateTotalValue((ArrayList<ProductsGroup>) warehouse.getGroups())*100000.0)/100000.0
                 +" од.");
 
+        totalValueLabel.setBackground(secondColor);
+        totalValueLabel.setForeground(textColor);
+
         groupPricesTablePanel = new JPanel();
+        groupPricesTablePanel.setBackground(secondColor);
         groupPricesTablePanel.setLayout(new GridLayout(1, 1));
         groupPricesTablePanel.setPreferredSize(new Dimension(250, Integer.MAX_VALUE));
 
@@ -492,6 +559,7 @@ public class MainFrame extends JFrame implements ActionListener {
         groupPricesTablePanel.setMaximumSize(new Dimension(100, Integer.MAX_VALUE));
 
         allProductsTablePanel = new JPanel();
+        allProductsTablePanel.setBackground(secondColor);
 
         allProductsTablePanel.setLayout(new GridLayout(1, 1));
 
@@ -506,6 +574,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private void initAllProductsTable() {
         allPoductsTable = new JTable(GoodsParser.parseAllGoods(warehouse), new String[]{"Група", "Назва", "Автор", "Опис", "Видавництво", "Кількість", "Ціна"});
+        allPoductsTable.setBackground(tableBackground);
+        allPoductsTable.setForeground(textColor);
+        allPoductsTable.getTableHeader().setForeground(textColor);
+        allPoductsTable.getTableHeader().setBackground(mainColor);
 
         for(int i = 0; i < allPoductsTable.getColumnCount(); i++) {
             allPoductsTable.getColumnModel().getColumn(i).setCellRenderer(new MyCellRenderer());
@@ -514,16 +586,22 @@ public class MainFrame extends JFrame implements ActionListener {
         allPoductsTable.getColumnModel().getColumn(6).setMaxWidth(75);
         
         JScrollPane jScrollPane = new JScrollPane(allPoductsTable);
+        jScrollPane.getViewport().setBackground(tableBackground);
         allProductsTablePanel.add(jScrollPane);
     }
 
     private void initGroupPricesTable() {
         groupPricesTable = new JTable(GoodsParser.getGroupPrices(warehouse), new String[]{"Група", "Ціна"});
+        groupPricesTable.setBackground(tableBackground);
+        groupPricesTable.setForeground(textColor);
+        groupPricesTable.getTableHeader().setForeground(textColor);
+        groupPricesTable.getTableHeader().setBackground(mainColor);
 
         for(int i = 0; i < groupPricesTable.getColumnCount(); i++){
             groupPricesTable.getColumnModel().getColumn(i).setCellRenderer(new MyCellRenderer());
         }
         JScrollPane jScrollPane = new JScrollPane(groupPricesTable);
+        jScrollPane.getViewport().setBackground(tableBackground);
         groupPricesTablePanel.add(jScrollPane);
     }
 
@@ -534,26 +612,39 @@ public class MainFrame extends JFrame implements ActionListener {
 
         //Головне найбільше вікно, яке тримає усі інші обʼєкти в собі
         JPanel goodsContentPanel = new JPanel();
+        goodsContentPanel.setBackground(secondColor);
         goodsContentPanel.setLayout(new BorderLayout());
 
         //ЛІВА ЧАСТИНА ВІКНА
 
         //Створення лівого вікна для групи товарів та кнопок
         JPanel groupPanel = new JPanel();
+        groupPanel.setBackground(secondColor);
         groupPanel.setPreferredSize(new Dimension(400, 0));
         groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.Y_AXIS));
 
         groupTablePanel = new JPanel(new GridLayout(1, 1));
+        groupTablePanel.setBackground(secondColor);
         groupTablePanel.setBorder(new EmptyBorder(5,5,5,5));
 
         initGroupTable(warehouse);
 
         JPanel groupButtonsPanel = new JPanel();
+        groupButtonsPanel.setBackground(secondColor);
         groupButtonsPanel.setLayout(new BoxLayout(groupButtonsPanel, BoxLayout.X_AXIS));
 
         addGroup = new JButton("Додати");
+        addGroup.setBackground(mainColor);
+        addGroup.setFocusable(false);
+        addGroup.setForeground(textColor);
         removeGroup = new JButton("Видалити");
+        removeGroup.setBackground(mainColor);
+        removeGroup.setFocusable(false);
+        removeGroup.setForeground(textColor);
         editGroup = new JButton("Редагувати");
+        editGroup.setBackground(mainColor);
+        editGroup.setFocusable(false);
+        editGroup.setForeground(textColor);
 
         addGroup.addActionListener(this);
         removeGroup.addActionListener(this);
@@ -569,14 +660,21 @@ public class MainFrame extends JFrame implements ActionListener {
         //ЦЕНТРАЛЬНА ЧАСТИНА ВІКНА
 
         JPanel goodsPanel = new JPanel();
+        goodsPanel.setBackground(secondColor);
         goodsPanel.setLayout(new BoxLayout(goodsPanel, BoxLayout.Y_AXIS));
 
         goodsTablePanel = new JPanel(new GridLayout(1, 1));
+        goodsPanel.setBackground(secondColor);
         goodsTablePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         if(choosedGroup == null){
             goodsTable = new JTable();
+            goodsTable.setBackground(tableBackground);
+            goodsTable.getTableHeader().setBackground(mainColor);
+            goodsTable.getTableHeader().setForeground(textColor);
+
             JScrollPane goodsTableScroll = new JScrollPane(goodsTable);
+            goodsTableScroll.getViewport().setBackground(tableBackground);
             goodsTablePanel.add(goodsTableScroll);
         } else {
             updateGoodsTable();
@@ -598,11 +696,26 @@ public class MainFrame extends JFrame implements ActionListener {
         goodsButtonsPanel.setLayout(new BoxLayout(goodsButtonsPanel, BoxLayout.X_AXIS));
 
         increaseGoods = new JButton("+");
+        increaseGoods.setBackground(mainColor);
+        increaseGoods.setFocusable(false);
+        increaseGoods.setForeground(textColor);
         decreaseGoods = new JButton("-");
+        decreaseGoods.setBackground(mainColor);
+        decreaseGoods.setFocusable(false);
+        decreaseGoods.setForeground(textColor);
 
         addGoods = new JButton("Додати");
+        addGoods.setBackground(mainColor);
+        addGoods.setFocusable(false);
+        addGoods.setForeground(textColor);
         removeGoods = new JButton("Видалити");
+        removeGoods.setBackground(mainColor);
+        removeGoods.setFocusable(false);
+        removeGoods.setForeground(textColor);
         editGoods = new JButton("Редагувати");
+        editGoods.setBackground(mainColor);
+        editGoods.setFocusable(false);
+        editGoods.setForeground(textColor);
 
         increaseGoods.addActionListener(this);
         decreaseGoods.addActionListener(this);
@@ -637,8 +750,14 @@ public class MainFrame extends JFrame implements ActionListener {
         groupTable.getColumnModel().getColumn(1).setCellRenderer(new MyCellRenderer());
         groupTable.setShowGrid(true);
         groupTable.setGridColor(Color.BLACK);
+        groupTable.setForeground(textColor);
+        groupTable.setBackground(tableBackground);
+        groupTable.setOpaque(true);
+        groupTable.getTableHeader().setForeground(textColor);
+        groupTable.getTableHeader().setBackground(mainColor);
 
         JScrollPane scrollPaneTable = new JScrollPane(groupTable);
+        scrollPaneTable.getViewport().setBackground(tableBackground);
         groupTablePanel.add(scrollPaneTable);
     }
 }

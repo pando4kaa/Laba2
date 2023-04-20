@@ -1,3 +1,8 @@
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: AddGroupUI.java
+ * Class, that creates a group addition window.
+ */
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -7,6 +12,7 @@ import java.awt.event.*;
  * Клас AddGroupUI є графічним інтерфейсом для додавання нової групи товарів
  */
 public class AddGroupUI extends JFrame {
+
     //елементи вікна
     private JPanel panel = new JPanel();
     private JLabel groupNameLabel, groupDescriptionLabel;
@@ -36,6 +42,12 @@ public class AddGroupUI extends JFrame {
         getContentPane().add(panel); //додати панель на вікно
     }
 
+    /**
+     * Конструктор для редагування групи.
+     * @param editGroup група яка буде редагована
+     * @param frame  головне вікно
+     * @param warehouse склад
+     */
     public AddGroupUI(ProductsGroup editGroup, MainFrame frame, Warehouse warehouse) {
         super("Редагувати групу товарів");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -100,6 +112,10 @@ public class AddGroupUI extends JFrame {
         buttonPanel.add(Box.createHorizontalGlue());
         panel.add(buttonPanel);
     }
+
+    /**
+     * Метод, який створює меню та додає різні контейнери.
+     */
     private void addGroupName() {
         //додавання назви групи товарів
         groupNameLabel = new JLabel("Назва групи товару:");
@@ -116,6 +132,9 @@ public class AddGroupUI extends JFrame {
         panel.add(groupNameField);
     }
 
+    /**
+     * Метод, який додає контейнери для опису групи.
+     */
     private void addProductDescription() {
         //додавання опису групи товарів
         groupDescriptionLabel = new JLabel("Опис групи товару:");
@@ -192,6 +211,9 @@ public class AddGroupUI extends JFrame {
 
     }
 
+    /**
+     * Метод, для редагування групи.
+     */
     private void editGroup() {
         String groupName = groupNameField.getText();
         String groupDescription = groupDescriptionField.getText();

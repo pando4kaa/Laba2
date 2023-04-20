@@ -1,22 +1,11 @@
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: Statistics.java
+ * Class, that counts different statistic information.
+ */
 import java.util.ArrayList;
 
 public class Statistics {
-//    public static void showAllProducts(ArrayList<ProductsGroup> groups) {
-//        for (ProductsGroup group : groups) {
-//            for (Product product : group.getProducts()) {
-//                System.out.println(product.getName() + " - " + product.getQuantity() + "шось ще");
-//            }
-//        }
-//    }
-//
-//    public static void showAllProductsByGroup(ArrayList<ProductsGroup> groups) {
-//        for (ProductsGroup group : groups) {
-//            System.out.println(group.getName() + ":");
-//            for (Product product : group.getProducts()) {
-//                System.out.println(product.getName() + " - " + product.getQuantity() + " ...");
-//            }
-//        }
-//    }
 
     /**
      * Обчислює загальну вартість всіх товарів на складі

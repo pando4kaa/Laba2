@@ -1,6 +1,9 @@
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: ProductGroup.java
+ * Class, that describes ProductsGroup.
+ */
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ProductsGroup {
     private String name; //назва групи товарів

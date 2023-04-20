@@ -1,3 +1,8 @@
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: Product.java
+ * Class, that describes a product.
+ */
 public class Product {
     private String name;
     private String author;

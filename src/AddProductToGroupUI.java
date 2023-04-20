@@ -1,6 +1,10 @@
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: AddProductToGroupUi.java
+ * Class, that creates product addition or editing window.
+ */
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.*;
 

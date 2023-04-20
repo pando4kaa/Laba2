@@ -1,3 +1,8 @@
+/**
+ * Authors: Tuhai Anastasia, Rafikov Rinat
+ * File: Test.java
+ * Class, that starts the app.
+ */
 import javax.swing.*;
 
 public class Tester {
