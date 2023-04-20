@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProductsGroup {
@@ -18,12 +19,15 @@ public class ProductsGroup {
         this.products = products;
     }
 
-    /*@Override
-    public String toString() {
-        return "Група книжок на тему " + name + "\n" +
-                "опис: " + description + "\n" +
-                "Товари: \n" + products;
-    }*/
+    public String toStr() {
+        StringBuilder str = new StringBuilder("Група книжок на тему " + name +
+                "\n\tОпис: " + description +
+                "\n\tТовари: ");
+        for (Product product : products){
+            str.append(product.toStr());
+        }
+        return str.toString();
+    }
 
     @Override
     public String toString() {

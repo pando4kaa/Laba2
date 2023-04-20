@@ -6,15 +6,14 @@ public class Product {
     private int quantity;
     private double price;
 
-    /*@Override
-    public String toString() {
-        return "Назва книги: " + name + "\n" +
-                "Автор: " + author  + "\n" +
-                "Опис: " + description + "\n" +
-                "Видавництво: " + publisher + "\n" +
-                "Кількість на складі: " + quantity + "\n" +
-                "Ціна: " + price + "\n";
-    }*/
+    public String toStr() {
+        return "\n\t\tНазва книги: " + name + "" +
+                "\n\t\tАвтор: " + author  + "" +
+                "\n\t\tОпис: " + description +
+                "\n\t\tВидавництво: " + publisher +
+                "\n\t\tКількість на складі: " + quantity +
+                "\n\t\tЦіна: " + price + "\n";
+    }
 
     @Override
     public String toString() {
